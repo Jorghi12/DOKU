@@ -1,0 +1,102 @@
+extends ..\layout
+
+block content
+  script(type='text/javascript').
+   function modalUp(imageId, price, description){
+      document.getElementById("modalImage").src = document.getElementById(imageId).src;
+      document.getElementById("modalPrice").value = price;
+      document.getElementById("modalDesc").value = description;
+      document.getElementById("modalLabel").value = imageId;
+   }
+
+  .page-header
+    h2 My Shopping
+    hr
+    ul.nav.nav-tabs
+      li.active
+        a(data-toggle='tab', href='#home') Currently Selling
+      li
+        a(data-toggle='tab', href='#menu1') Currently Buying
+      li
+        a(data-toggle='tab', href='#menu2') Transaction History
+    .tab-content
+      #home.tab-pane.fade.in.active
+        h3 <b>My Items For Sale:</b>
+        p
+         .row
+             each item in items
+                 .col-sm-4
+                     .panel.panel-default(style='background-color: lightblue;height:300px;width:370px')
+                       .panel-body
+                         img(id=item.itemId,src='data:image/jpeg;base64,' + item.image[0], height=200, style='height:200px;width:337px;')
+                         p
+                         a.btn.btn-primary(style='width:50%',href='/transactions/remove/' + item.itemId,data-transition='fade', data-theme='c')
+                          |Remove from listings
+                         a.btn.btn-success(style='width:50%',onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
+                          |Update item description
+                         - var buttonType = item.readyForSchedule ? 'btn btn-primary' : 'btn btn-warning'
+                         - var buttonText = item.readyForSchedule ? 'Schedule Pickup Time' : 'Waiting for buyers'
+                         - var buttonLink = item.readyForSchedule ? '/transactions/schedulepickup/' + item.itemId : '#'
+                         if item.readyForSchedule
+                           a(class=buttonType,style='width:100%;margin-top:3px',href=buttonLink,data-transition='fade', data-theme='c')
+                            |#{buttonText}
+      #menu1.tab-pane.fade
+        h3 <b>Items I'm currently buying:</b>
+        p
+         .row
+             each item in purchasedItems
+                 .col-sm-4
+                     .panel.panel-default(style='background-color: lightblue;height:270px;width:370px')
+                       .panel-body
+                         img(id=item.itemId,src='data:image/jpeg;base64,' + item.image[0], height=200, style='height:200px;width:337px;')
+                         p
+                         a.btn.btn-warning(href='#' + item.itemId,data-transition='fade', data-theme='c')
+                          |Waiting for Seller to Confirm
+                         a.btn.btn-success(data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
+                          |Ask a Question
+      #menu2.tab-pane.fade
+        h3 <b>My Transaction History:</b>
+        .container
+          table.table
+            thead
+              tr
+                th Type
+                th Item
+                th Price
+            tbody
+              tr
+                td <b>Bought</b>
+                td <a href="#">Jorg's sexy abs</a>
+                td $3000.00
+              tr
+                td <b>Bought</b>
+                td <a href="#">Jorg's sexy charm</a>
+                td $Priceless
+              tr
+                td <b>Bought</b>
+                td <a href="#">Swag</a>
+                td $300.00
+    form(action='/transactions/update', method='post')
+     #myModal.modal.fade(role='dialog', data-backdrop='true')
+      .modal-dialog
+         .modal-content
+           .modal-header
+             button.close(type='button', data-dismiss='modal') ×
+             h4.modal-title Update Item
+           .modal-body(id="modalBodyId")
+             .row
+               .col-sm-7
+                 img(id='modalImage', height=200, style='height:200px;width:337px;')
+               .col-sm-4
+                    label(for='modalDesc') Description
+                        textarea#modalDesc.form-control(name='itemDescription',rows='5',style="resize:none;width:130%")
+                    p
+                    label(for='modalPrice') Price
+                        .input-group
+                         span.input-group-addon $
+                         span.input-group-addon 0.00
+                         input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:160%")
+           .modal-footer
+             input(id="modalLabel", name="itemId",style="visibility:hidden;height:0px")
+             button.btn.btn-danger(type='button', data-dismiss='modal') Close
+             button.btn.btn-primary(type='submit') Update

@@ -1,0 +1,52 @@
+extends ..\layout
+
+block content
+
+  .page-header
+    h2 Sell an item
+    hr
+    .row
+      form(method='post',enctype='multipart/form-data')
+       ul.nav.nav-tabs
+          li.active
+            a(data-toggle='tab', href='#home') Photograph
+          li
+            a(data-toggle='tab', href='#menu1') Description & Price
+          li
+            a(data-toggle='tab', href='#menu2') Submit
+       .tab-content
+          #home.tab-pane.fade.in.active
+            .panel.panel-primary(style='width:360px;height:320px')
+                .panel-heading A) Photograph
+                .panel-body 
+                    h3 Load an image of your item.
+                    .row
+                    .col-sm-6
+                        .fileinput.fileinput-new(data-provides='fileinput')
+                          .fileinput-preview.thumbnail(style='width: 200px; height: 150px;')
+                          div
+                            span.btn.btn-file
+                              span.fileinput-new Select image
+                              span.fileinput-exists Change
+                              input(name='myImage',type='file',accept="image/*" capture="camera")
+                            a.btn.fileinput-exists(href='#', data-dismiss='fileinput') Remove
+          #menu1.tab-pane.fade
+            .panel.panel-primary(style='width:360px;height:320px')
+                .panel-heading B) Description & Price
+                .panel-body
+                    label(for='item_title') Title:
+                        input.form-control(type='text', name='itemTitle',style='width:150%')
+                    label(for='item_desc') Description:
+                        textarea#item_desc.form-control(name='description',rows='5',style="resize:none;width:160%")
+                    p
+                    label(for='item_price') Price:
+                        .input-group
+                         span.input-group-addon $
+                         span.input-group-addon 0.00
+                         input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)')
+
+          #menu2.tab-pane.fade
+            .panel.panel-primary(style='width:360px;height:320px')
+                .panel-heading C) One Click Submit
+                .panel-body 
+                    input.btn.btn-default(style='width:100%',type='submit',value='One Click Submit!',data-transition='fade', data-theme='c')
