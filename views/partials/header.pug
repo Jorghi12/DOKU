@@ -11,8 +11,6 @@
         | Doku
     .collapse.navbar-collapse
       ul.nav.navbar-nav
-        li(class=(title == 'Home') ? 'active' : undefined)
-          a(href='/') Home
         li(class=(title == 'Catalog') ? 'active' : undefined)
           a(href='/marketplace') Catalog
         li(class=(title == 'My Shopping') ? 'active' : undefined)
@@ -23,6 +21,8 @@
           a(href='/api') API Examples
         li(style='visibility:hidden')
           a(href='/status') Status
+        li(style='visibility:hidden',class=(title == 'Home') ? 'active' : undefined)
+          a(href='/') Home
 		  
       ul.nav.navbar-nav.navbar-right
         li(style='background-color:darkblue')

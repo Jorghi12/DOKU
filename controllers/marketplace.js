@@ -2,6 +2,7 @@ const ItemLib = require('../models/Items');
 const Item = ItemLib.Item;
 const Image = ItemLib.Image;
 const User = require('../models/User');
+const moment = require('moment');
 const createExtendedFields = require('../models/UserShopInfo').createExtendedFields;
 const populateUserShopInfo = require('../models/UserShopInfo').populateUserShopInfo;
 const PickUp = require('../models/PickUps').Pickup;
@@ -66,7 +67,7 @@ exports.schedulePickUp = (req, res) => {
 		var imageStrings = [];
 	    for (var i = 0;i < item.images.length; i++){
 		    var image = item.images[i];
-		    imageStrings.push(image.image.toString('base64'));
+		    imageStrings.push(image.image.toString('utf8'));
 	    };
 		
 		//Create the name friendly item map
@@ -97,16 +98,29 @@ exports.itemFullView = (req, res) => {
 		var imageStrings = [];
 	    for (var i = 0;i < item.images.length; i++){
 		    var image = item.images[i];
-		    imageStrings.push(image.image.toString('base64'));
+		    imageStrings.push(image.image.toString('utf8'));
 	    };
 		
+		
+	  if (req.user){
+		  var myID = item.sellerId == req.user._id;
+	  }
+	  else{
+		  var myID = false;
+	  };
+	  
+	    //Grab the timestamp of the item
+	    var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
+	  
 		//Create the name friendly item map
 		var mappedItem = {
-						  isMyItem: item.sellerId == req.user._id, 
+						  isMyItem: myID, 
 						  itemId: item._id, 
 						  image: imageStrings, 
 						  description: item.description, 
-						  price: item.price
+						  price: item.price,
+						  title: item.title,
+						  timestamp: timestamp
 	    };
 		
 		res.render('marketplace/catalogItem', {
@@ -148,7 +162,7 @@ exports.buyItem = (req, res) => {
 					//Could not find the buyer's user account
 					req.flash('errors', { msg: 'Failed to purchase item.' });
 				}
-				console.log(user);
+				//console.log(user);
 				if (user.userShopInfo.buyInfo.itemsBeingPurchased.indexOf(req.params.itemId) == -1){
 					user.userShopInfo.buyInfo.itemsBeingPurchased.push(req.params.itemId)
 				}
@@ -191,7 +205,8 @@ exports.buyItem = (req, res) => {
 exports.updateItem = (req, res) => {
 	Item.findOneAndUpdate({sellerId: req.user._id, _id: req.body.itemId},{
 		price: req.body.itemPrice,
-		description: req.body.itemDescription
+		description: req.body.itemDescription,
+		title: req.body.itemTitle
 	}, function(err, item) {
 		if (err){
 			//Failure Message
@@ -254,9 +269,9 @@ exports.showMyPage = (req, res) => {
       var imageStrings = [];
 	  for (var i = 0;i < item.images.length; i++){
 		  var image = item.images[i];
-		  imageStrings.push(image.image.toString('base64'));
+		  imageStrings.push(image.image.toString('utf8'));
 	  };
-      itemsToSell.push({readyForSchedule: item.buyers.length > 0,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
+      itemsToSell.push({title: item.title, readyForSchedule: item.buyers.length > 0,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
     });
 
 	//Pull the currently bought items.
@@ -271,9 +286,9 @@ exports.showMyPage = (req, res) => {
 					var imageStrings = [];
 					for (var i = 0;i < item.images.length; i++){
 						var image = item.images[i];
-						imageStrings.push(image.image.toString('base64'));
+						imageStrings.push(image.image.toString('utf8'));
 					};
-					return {itemId: item._id, image: imageStrings, description: item.description, price: item.price};
+					return {title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
 				});
 				
 				res.render('marketplace/transactions', {
@@ -288,6 +303,57 @@ exports.showMyPage = (req, res) => {
 };
 
 /**
+ * GET /marketplace/search
+ * Search through Catalog items.
+ */
+exports.searchCatalog = (req, res) => {
+  console.log("JORG DOKU");
+  console.log(req.body.selectedCategory);
+  var category = req.body.selectedCategory == "All Categories" ? ".*" : req.body.selectedCategory;
+  console.log(category);
+  Item.find().or(
+    [
+		{"title": { "$regex": req.body.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}},
+		{"description": { "$regex": req.body.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}}
+	]).exec(
+	function(err,items) { 
+		var itemMap = [];
+		//If we couldn't find any results.
+		if (items == null){
+			items = [];
+		};
+		items.forEach(function(item) {
+		  var imageStrings = [];
+		  for (var i = 0;i < item.images.length; i++){
+			  var image = item.images[i];
+			  imageStrings.push(image.image.toString('utf8'));
+		  };
+		  if (req.user){
+			  var myID = item.sellerId == req.user._id;
+		  }
+		  else{
+			  var myID = false;
+		  };
+		  
+		  //Grab the timestamp of the item
+		  var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
+		  var shortDescription = item.description;
+		  if (shortDescription.length >= 27) {
+			  shortDescription = shortDescription.substr(0,24) + "...";
+		  }
+		  
+		  itemMap.push({timestamp: timestamp,isMyItem: myID, itemId: item._id, image: imageStrings, description: shortDescription, price: item.price, title: item.title});
+		});
+
+		res.render('marketplace/index', {
+		  title: 'MarketPlace',
+		  items: itemMap
+		});
+  });
+}
+
+
+/**
  * GET /marketplace
  * List of Catalog items.
  */
@@ -299,9 +365,28 @@ exports.getCatalog = (req, res) => {
       var imageStrings = [];
 	  for (var i = 0;i < item.images.length; i++){
 		  var image = item.images[i];
-		  imageStrings.push(image.image.toString('base64'));
+		  imageStrings.push(image.image.toString('utf8'));
 	  };
-      itemMap.push({isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
+	  if (req.user){
+		  var myID = item.sellerId == req.user._id;
+	  }
+	  else{
+		  var myID = false;
+	  };
+	  
+	  //Grab the timestamp of the item
+	  var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
+	  var shortDescription = item.description;
+	  console.log(item);
+	  if (shortDescription==null){
+		  item.remove();
+		  return;
+	  }
+	  if (shortDescription.length >= 27) {
+		  shortDescription = shortDescription.substr(0,24) + "...";
+	  }
+	  
+      itemMap.push({timestamp: timestamp,isMyItem: myID, itemId: item._id, image: imageStrings, description: shortDescription, price: item.price, title: item.title});
     });
 
     res.render('marketplace/index', {
@@ -312,6 +397,12 @@ exports.getCatalog = (req, res) => {
 };
 
 exports.getSell = (req, res) => {
+	//Check if logged in
+	if (!req.user){
+		req.flash('info', { msg: 'Login to sell an item.' });
+		res.redirect('/marketplace');
+	}
+	
   res.render('marketplace/sell', {
     title: 'MarketPlace'
   });
@@ -333,17 +424,29 @@ exports.sellNewItem = (req, res, next) => {
 		sellerId: req.user._id, //The site _id of the seller.
 		description: req.body.description, //The description of the item
 		price: req.body.price, //The price of the item
-		title: req.body.item_title, // The title of the item
+		title: req.body.itemTitle, // The title of the item
 		images: []
 	});
-
+	
+	//Iterate through body for variables
+	var imagebase = [];
+	for(var key in req.body) {
+	  if(req.body.hasOwnProperty(key)){
+		if (key.startsWith("imagebase")){
+			var buff = Buffer.from(req.body[key].toString(),'utf8');
+			imagebase.push(buff);
+		}
+	  }
+	}
 
 	//Add the images
-	var image = new Image();
-	image.timestamp = 0;
-	image.contentType = req.file.mimetype;
-	image.image = req.file.buffer;
-	item.images.push(image);
+	for (var i = 0;i < imagebase.length;i++){
+		var image = new Image();
+		image.timestamp = 0;
+		image.contentType = 'image/jpeg';
+		image.image = imagebase[i];
+		item.images.push(image);
+	}
 	
 	//Save the item in MongoDB
 	item.save((err) => {

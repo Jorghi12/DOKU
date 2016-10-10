@@ -1,58 +1,58 @@
 extends ..\layout
 
 block content
-  .page-header
     h2 Latest Classifieds
+    br
+    form.navbar-form(action='/marketplace/search', method='post')
+        .form-group(style='display:inline;')
+          .input-group
+            .input-group-btn
+              button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
+                input.span#category_choice(style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;',name="selectedCategory", value="All Categories") 
+                span.glyphicon.glyphicon-chevron-down
+              ul.dropdown-menu.pull-left#drop1
+                li
+                  a(href='#',style='font-weight:bold') All Categories
+                li
+                  a(href='#',style='font-weight:bold') Books
+                li
+                  a(href='#',style='font-weight:bold') Sublets
+                li
+                  a(href='#',style='font-weight:bold') Technology & Gadgets
+                li
+                  a(href='#',style='font-weight:bold') Men's Apparel
+                li
+                  a(href='#',style='font-weight:bold') Women's Apparel
+                li
+                  a(href='#',style='font-weight:bold') Furniture & Home
+                li
+                  a(href='#',style='font-weight:bold') Tickets
+                li
+                  a(href='#',style='font-weight:bold') Ride Share
+            input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='width:400px;font-weight:bold;font-size:18px')
 
-    ul.nav.nav-pills.nav-justified
-      nav.navbar.navbar-default
-       .container-fluid
-          // Brand and toggle get grouped for better mobile display
-          .navbar-header
-            button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.navbar-brand(href='#') Search via Tags
-          // Collect the nav links, forms, and other content for toggling
-          #bs-example-navbar-collapse-1.collapse.navbar-collapse
-            ul.nav.navbar-nav
-              li
-               form.navbar-form.navbar-left
-                .form-group
-                  input(type='text', value='Textbooks', data-role='tagsinput')
-               button.btn.btn-default(href='#',style='margin-top:7px') Search
-            ul.nav.navbar-nav.navbar-right
-              li(style='visibility:hidden')
-                a(href='#') Link
-              li.dropdown
-                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                  | Categories
-                  span.caret
-                ul.dropdown-menu
-                  li
-                    a(href='#') Books
-                  li
-                    a(href='#') Furniture
-                  li
-                    a(href='#') Men's Apparel
-                  li
-                    a(href='#') Women's Apparel
+            button.btn.btn-default(style='height:34px')
+                span.glyphicon.glyphicon-search
+
     p
     hr
 
+    script(text='text/javascript').
+     $("#drop1 li").click(function(e){
+      document.getElementById("category_choice").value = $(this).text()
+     });
+
     .row
         each item in items
-            .col-sm-4
+            .col-sm-3
                - var itemColor = item.isMyItem ? 'wheat' : 'lightblue'
                a(href='/marketplace/fullView/' + item.itemId, style="color: inherit;text-decoration: none;cursor:pointer;")
-                .panel.panel-default(style='background-color: ' + itemColor + ';height:320px;width:370px')
-                  .panel-body
-                    <b>Title: </b>#{item.title}
-                    img(src='data:image/jpeg;base64,' + item.image[0], height=200, style='height:230px;width:337px;margin-top:5px')
+                    img(src=item.image[0], height=200, style='height:230px;width:264px;margin-top:5px')
+                    h6(style='font-size:1.05rem;letter-spacing:0.065rem;font-family:"NeueHaasUnicaProRegular";font-weight:300')
+                     | #{item.timestamp}                  
+                    <hr style='margin-bottom:7px;margin-top:7px'>
+                    <b style='font-size:16px;font-family:"ProximaNova-Semibold";text-transform:uppercase'>#{item.title}</b>
                     p
-                    p
-                     | <b>Price: $</b>#{item.price}
-                    p
-                     a.btn.btn-success.btn-xs(href='/transactions/buy/' + item.itemId,data-transition='fade', data-theme='c',style="float:right;margin-top:-25px") Purchase
+                     | <small style='width:100%;letter-spacing:0.065rem;font-family:"NeueHaasUnicaProRegular"'>#{item.description}</small>
+                     | <br>
+                     | <b>$#{item.price}</b>

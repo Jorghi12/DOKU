@@ -3,50 +3,114 @@ extends ..\layout
 block content
 
   .page-header
+    script(type='text/javascript').
+     function hover(element) {
+       element.style.outline = '3px solid yellow';
+       //element.setAttribute('src', 'http://dummyimage.com/100x100/eb00eb/fff');
+     }
+
+     function unhover(element) {
+       element.style.outline = 'none';
+       //element.setAttribute('src', 'http://dummyimage.com/100x100/000/fff');
+     }
+     
+     function updateImage(element) {
+       //$("#mainProductImage").attr("src",element.src);
+     }
+     
+    style.
+        /* Translucent background image */
+        .cropit-preview-background {
+          opacity: .2;
+        }
+
+        /*
+         * If the slider or anything else is covered by the background image,
+         * use relative or absolute position on it
+         */
+        input.cropit-image-zoom-input {
+          position: relative;
+        }
+
+        /* Limit the background image by adding overflow: hidden */
+        #image-cropper {
+          overflow: hidden;
+        }
+
     h2 Sell an item
     hr
     .row
-      form(method='post',enctype='multipart/form-data')
-       ul.nav.nav-tabs
-          li.active
-            a(data-toggle='tab', href='#home') Photograph
-          li
-            a(data-toggle='tab', href='#menu1') Description & Price
-          li
-            a(data-toggle='tab', href='#menu2') Submit
-       .tab-content
-          #home.tab-pane.fade.in.active
-            .panel.panel-primary(style='width:360px;height:320px')
-                .panel-heading A) Photograph
-                .panel-body 
-                    h3 Load an image of your item.
-                    .row
-                    .col-sm-6
-                        .fileinput.fileinput-new(data-provides='fileinput')
-                          .fileinput-preview.thumbnail(style='width: 200px; height: 150px;')
-                          div
-                            span.btn.btn-file
-                              span.fileinput-new Select image
-                              span.fileinput-exists Change
-                              input(name='myImage',type='file',accept="image/*" capture="camera")
-                            a.btn.fileinput-exists(href='#', data-dismiss='fileinput') Remove
-          #menu1.tab-pane.fade
-            .panel.panel-primary(style='width:360px;height:320px')
-                .panel-heading B) Description & Price
-                .panel-body
-                    label(for='item_title') Title:
-                        input.form-control(type='text', name='itemTitle',style='width:150%')
-                    label(for='item_desc') Description:
-                        textarea#item_desc.form-control(name='description',rows='5',style="resize:none;width:160%")
-                    p
-                    label(for='item_price') Price:
-                        .input-group
-                         span.input-group-addon $
-                         span.input-group-addon 0.00
-                         input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)')
+     form#theFormObject(method='post',enctype='application/json')
+           ul.nav.nav-tabs
+              li.active
+                a(data-toggle='tab', href='#home') Photograph
+              li
+                a(data-toggle='tab', href='#menu1') Description & Price
+              li
+                a(data-toggle='tab', href='#menu2') Submit
+           .tab-content
+              #home.tab-pane.fade.in.active
+                .panel.panel-primary(style='width:700px;height:530px')
+                    .panel-heading A) Photograph
+                    .panel-body 
+                        h3 Upload images of your item.
+                        .row
+                         .col-sm-4#uploadedImages
+                         
+                         .col-sm-3
+                            #image-cropper(style='width:400px;cursor: pointer;')
+                                .cropit-preview(style='width:500px;height:300px')
+                                input.cropit-image-zoom-input(type='range')
+                                input.cropit-image-input(type='file',accept="image/*" capture="camera")
+                                .select-image-btn Select new image
+                            button.btn.btn-primary(type='button',onclick='addImage()',style='width:400px;margin-top:5px') Add image
+              #menu1.tab-pane.fade
+                .panel.panel-primary(style='width:360px;height:330px')
+                    .panel-heading B) Description & Price
+                    .panel-body
+                        label(for='item_title') Title:
+                            input.form-control(type='text', name='itemTitle',style='width:150%')
+                        label(for='item_desc') Description:
+                            textarea#item_desc.form-control(name='description',rows='5',style="resize:none;width:160%")
+                        p
+                        label(for='item_price') Price:
+                            .input-group
+                             span.input-group-addon $
+                             span.input-group-addon 0.00
+                             input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)')
 
-          #menu2.tab-pane.fade
-            .panel.panel-primary(style='width:360px;height:320px')
-                .panel-heading C) One Click Submit
-                .panel-body 
-                    input.btn.btn-default(style='width:100%',type='submit',value='One Click Submit!',data-transition='fade', data-theme='c')
+              #menu2.tab-pane.fade
+                .panel.panel-primary(style='width:360px;height:100px')
+                    .panel-heading C) One Click Submit
+                    .panel-body 
+                        input.btn.btn-default(style='width:100%',type='submit',value='One Click Submit!',data-transition='fade', data-theme='c')
+
+    script(type='text/javascript').
+       $imageCropper = $('#image-cropper').cropit();
+       $('#image-cropper').cropit({ imageBackground: true });
+       
+       var addImage= function (){
+           var rand_id =Math.random().toString().substr(2);
+           var img = $('<img />', { 
+              id: 'image' + rand_id,
+              src: $imageCropper.cropit('export', {type: 'image/jpeg',quality: .9,originalSize: true}),
+              onclick: 'updateImage(this)',
+              onmouseover: 'hover(this)',
+              onmouseout: 'unhover(this)',
+              height: '200',
+              width: '200',
+              style: 'height:95px;width:95px;margin-right:5px;margin-bottom:5px;'
+            });
+            img.appendTo('#uploadedImages');
+            var imageBase = $('<input/>',{
+                id: 'imagebase' + rand_id,
+                type: 'hidden',
+                name: 'imagebase' + rand_id,
+                value: $imageCropper.cropit('export', {type: 'image/jpeg',quality: .9,originalSize: true})
+            });
+            imageBase.appendTo('#theFormObject');
+            
+            $('input.cropit-image-input').val('');
+            $('.cropit-preview-background').removeAttr('src');
+            $('.cropit-preview-image').removeAttr('src');
+       };

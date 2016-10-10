@@ -1,15 +1,15 @@
 extends ..\layout
 
 block content
-  script(type='text/javascript').
-   function modalUp(imageId, price, description){
-      document.getElementById("modalImage").src = document.getElementById(imageId).src;
-      document.getElementById("modalPrice").value = price;
-      document.getElementById("modalDesc").value = description;
-      document.getElementById("modalLabel").value = imageId;
-   }
+    script(type='text/javascript').
+       function modalUp(imageId, price, description, title){
+         document.getElementById("modalImage").src = document.getElementById(imageId).src;
+         document.getElementById("modalPrice").value = price;
+         document.getElementById("modalDesc").value = description;
+         document.getElementById("modalLabel").value = imageId;
+         document.getElementById("modalTitle").value = title;
+       }
 
-  .page-header
     h2 My Shopping
     hr
     ul.nav.nav-tabs
@@ -26,13 +26,13 @@ block content
          .row
              each item in items
                  .col-sm-4
-                     .panel.panel-default(style='background-color: lightblue;height:300px;width:370px')
+                     .panel.panel-default(style='background-color: lightblue;height:273px;width:370px')
                        .panel-body
-                         img(id=item.itemId,src='data:image/jpeg;base64,' + item.image[0], height=200, style='height:200px;width:337px;')
+                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:337px;')
                          p
                          a.btn.btn-primary(style='width:50%',href='/transactions/remove/' + item.itemId,data-transition='fade', data-theme='c')
                           |Remove from listings
-                         a.btn.btn-success(style='width:50%',onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
+                         a.btn.btn-success(style='width:50%',onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '","' + item.title + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
                           |Update item description
                          - var buttonType = item.readyForSchedule ? 'btn btn-primary' : 'btn btn-warning'
                          - var buttonText = item.readyForSchedule ? 'Schedule Pickup Time' : 'Waiting for buyers'
@@ -48,7 +48,7 @@ block content
                  .col-sm-4
                      .panel.panel-default(style='background-color: lightblue;height:270px;width:370px')
                        .panel-body
-                         img(id=item.itemId,src='data:image/jpeg;base64,' + item.image[0], height=200, style='height:200px;width:337px;')
+                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:337px;')
                          p
                          a.btn.btn-warning(href='#' + item.itemId,data-transition='fade', data-theme='c')
                           |Waiting for Seller to Confirm
@@ -78,16 +78,19 @@ block content
                 td $300.00
     form(action='/transactions/update', method='post')
      #myModal.modal.fade(role='dialog', data-backdrop='true')
-      .modal-dialog
+      .modal-dialog(style='width:800px;')
          .modal-content
            .modal-header
              button.close(type='button', data-dismiss='modal') ×
              h4.modal-title Update Item
-           .modal-body(id="modalBodyId")
+           .modal-body(id="modalBodyId", style='width:800px;')
              .row
-               .col-sm-7
-                 img(id='modalImage', height=200, style='height:200px;width:337px;')
                .col-sm-4
+                 img(id='modalImage', height=200, style='height:262px;width:337px;')
+               .col-sm-3(style='margin-left:30px')
+                    label(for='modalTitle') Title
+                        textarea#modalTitle.form-control(name='itemTitle',rows='1',style="resize:none;width:130%")
+                    p
                     label(for='modalDesc') Description
                         textarea#modalDesc.form-control(name='itemDescription',rows='5',style="resize:none;width:130%")
                     p
@@ -95,7 +98,30 @@ block content
                         .input-group
                          span.input-group-addon $
                          span.input-group-addon 0.00
-                         input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:160%")
+                         input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:134%")
+               .col-sm-3(style='margin-left:40px')
+                    button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
+                      input.span#category_choice(style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;',name="selectedCategory", value="All Categories") 
+                      span.glyphicon.glyphicon-chevron-down
+                    ul.dropdown-menu#drop1(style='margin-left:14px;width:230px')
+                      li
+                        a(href='#',style='font-weight:bold') All Categories
+                      li
+                        a(href='#',style='font-weight:bold') Books
+                      li
+                        a(href='#',style='font-weight:bold') Sublets
+                      li
+                        a(href='#',style='font-weight:bold') Technology & Gadgets
+                      li
+                        a(href='#',style='font-weight:bold') Men's Apparel
+                      li
+                        a(href='#',style='font-weight:bold') Women's Apparel
+                      li
+                        a(href='#',style='font-weight:bold') Furniture & Home
+                      li
+                        a(href='#',style='font-weight:bold') Tickets
+                      li
+                        a(href='#',style='font-weight:bold') Ride Share
            .modal-footer
              input(id="modalLabel", name="itemId",style="visibility:hidden;height:0px")
              button.btn.btn-danger(type='button', data-dismiss='modal') Close

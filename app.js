@@ -20,7 +20,6 @@ const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
-
 const storage = multer.memoryStorage()
 const streamImage = multer({ storage: storage });
 
@@ -79,7 +78,7 @@ app.use(sass({
 }));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({limit:'20mb', extended: true }));
 app.use(expressValidator());
 app.use(session({
   resave: true,
@@ -122,7 +121,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
+app.get('/', marketController.getCatalog);//homeController.index);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -143,9 +142,10 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 /**
  * Marketplace Routes!
  */
+app.post('/marketplace/search', marketController.searchCatalog)
 app.get('/marketplace', marketController.getCatalog);
 app.get('/marketplace/sell', marketController.getSell);
-app.post('/marketplace/sell', streamImage.single('myImage'), marketController.sellNewItem);
+app.post('/marketplace/sell', marketController.sellNewItem);
 app.get('/marketplace/fullView/:itemId', marketController.itemFullView);
 app.get('/transactions', marketController.showMyPage);
 app.get('/transactions/remove/:itemId', marketController.removeItem);

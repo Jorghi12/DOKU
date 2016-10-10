@@ -14,8 +14,8 @@ const itemSchema = new mongoose.Schema({
   price: {type: Number},
   images: [imageSchema],
   buyers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], //The IDs of the accounts who want to buy the item.
-  tags: [String], //The Tag names of which this item belongs to.
-  title: {type: String, default: ''}
+  title: {type: String, default: ''},
+  category: {type: String, default: ''}
 }, { timestamps: true });
 
 const Item = mongoose.model('Item', itemSchema);

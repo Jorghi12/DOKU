@@ -2,20 +2,32 @@ extends ../layout
 
 block content
   .page-header
-    h3 #{title} #{item.title}
+       script(type='text/javascript').
+         function hover(element) {
+           element.style.outline = '3px solid yellow';
+           //element.setAttribute('src', 'http://dummyimage.com/100x100/eb00eb/fff');
+         }
 
-  .panel.panel-default(style='background-color: lightblue;height:500px;')
-     .panel-body
+         function unhover(element) {
+           element.style.outline = 'none';
+           //element.setAttribute('src', 'http://dummyimage.com/100x100/000/fff');
+         }
+         
+         function updateImage(element) {
+           $("#mainProductImage").attr("src",element.src);
+         }
+
        .row
+        .col-sm-1
+         each image in item.image
+          .row
+           img#sideImage(onclick="updateImage(this)", onmouseover="hover(this);", onmouseout="unhover(this)", src=image, height=200, style='height:95px;width:95px;')
+           <br>
         .col-sm-6
-         img(id=item.itemId,src='data:image/jpeg;base64,' + item.image[0], height=200, style='height:423px;width:500px;')
+         img#mainProductImage(src=item.image[0], height=200, style='height:423px;width:500px;')
          p
-         a.btn.btn-primary(href='/transactions/buy/' + item.itemId,data-transition='fade', data-theme='c', style='width:250px')
-          |Purchase Item
-         a.btn.btn-warning(style='width:250px', onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
-          |Ask a Question
-        .col-sm-6
-        div(style='overflow:hidden;')
+        .col-sm-4
+         div(style='overflow:hidden;')
           .form-group
            .row
             .col-md-8
@@ -28,9 +40,19 @@ block content
             });
             });
 
-        p
-         h3
-          | <b>Price: $</b>#{item.price}
-         p
-         h3
-          | <b>Description: </b>#{item.description}
+         h3(style='letter-spacing:.25rem;text-transform:uppercase;font-weight:300;margin-top:-18px')
+          | #{item.title}
+         h3(style='font-size:16px')
+          | #{item.description}
+         h3(style='font-size:18px')
+          | <b>$#{item.price}</b>
+         a.btn.btn-primary(style='width:100%;margin-top:30px', href='/transactions/buy/' + item.itemId,data-transition='fade', data-theme='c')
+          |PURCHASE WITH Venmo
+         a.btn.btn-warning(style='width:100%;margin-top:5px', onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
+          |MAKE AN OFFER
+         a.btn.btn-warning(style='width:100%;margin-top:5px', onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
+          |ASK A QUESTION
+         h5(style='font-weight:bold;color:gray;letter-spacing:.075em;margin-top:40px')
+          | Comments
+         h5
+          | There are no comments yet.
