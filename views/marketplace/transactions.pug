@@ -11,7 +11,8 @@ block content
          document.getElementById("modalCategory").value = category;
        }
 
-    h2 My Shopping
+    .myshopping
+      h2.title My Shopping
     hr
     ul.nav.nav-tabs
       li.active
@@ -27,9 +28,9 @@ block content
          .row
              each item in items
                  .col-sm-4
-                     .panel.panel-default(style='background-color: lightblue;height:273px;width:370px')
+                     .panel.panel-default
                        .panel-body
-                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:337px;')
+                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
                          p
                          a.btn.btn-primary(style='width:50%',href='/transactions/remove/' + item.itemId,data-transition='fade', data-theme='c')
                           |Remove from listings
