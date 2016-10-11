@@ -1,41 +1,47 @@
 extends ..\layout
 
 block content
-    h2 Latest Classifieds
-    br
-    form.navbar-form(action='/marketplace/search', method='post')
-        .form-group(style='display:inline;')
-          .input-group
-            .input-group-btn
-              button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
-                input.span#category_choice(style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;',name="selectedCategory", value="All Categories") 
-                span.glyphicon.glyphicon-chevron-down
-              ul.dropdown-menu.pull-left#drop1
-                li
-                  a(href='#',style='font-weight:bold') All Categories
-                li
-                  a(href='#',style='font-weight:bold') Books
-                li
-                  a(href='#',style='font-weight:bold') Sublets
-                li
-                  a(href='#',style='font-weight:bold') Technology & Gadgets
-                li
-                  a(href='#',style='font-weight:bold') Men's Apparel
-                li
-                  a(href='#',style='font-weight:bold') Women's Apparel
-                li
-                  a(href='#',style='font-weight:bold') Furniture & Home
-                li
-                  a(href='#',style='font-weight:bold') Tickets
-                li
-                  a(href='#',style='font-weight:bold') Ride Share
-            input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='width:400px;font-weight:bold;font-size:18px')
+
+    .row#searchbar
+      h2.title Buy. Sell. Cornell.
+      br
+      form.navbar-form(action='/marketplace/search', method='post')
+          .form-group(style='display:inline;')
+            .input-group
+              .input-group-btn
+                button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
+                  input.span#category_choice(style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value="Categories") 
+                  span.glyphicon.glyphicon-chevron-down
+                ul.dropdown-menu.pull-left#drop1
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') All Categories
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Books
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Sublets
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Technology & Gadgets
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Men's Apparel
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Women's Apparel
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Furniture & Home
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Tickets
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Ride Share
+              input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='width:400px;font-size:18px;font-family:Arial')
 
             button.btn.btn-default(style='height:34px')
                 span.glyphicon.glyphicon-search
 
     p
-    hr
+    .row
+      .subtitletext
+        span.subtitle alternatively, browse through the latest offerings :
+    hr#lineborder
+    br
 
     script(text='text/javascript').
      $("#drop1 li").click(function(e){
@@ -47,12 +53,12 @@ block content
             .col-sm-3
                - var itemColor = item.isMyItem ? 'wheat' : 'lightblue'
                a(href='/marketplace/fullView/' + item.itemId, style="color: inherit;text-decoration: none;cursor:pointer;")
-                    img(src=item.image[0], height=200, style='height:230px;width:264px;margin-top:5px')
-                    h6(style='font-size:1.05rem;letter-spacing:0.065rem;font-family:"NeueHaasUnicaProRegular";font-weight:300')
+                    img(src=item.image[0], style='height:200px;width:250px;margin-top:5px')
+                    h6(style='font-size:1.05rem;letter-spacing:0.065rem;font-family:Montserrat,sans-serif;font-weight:300')
                      | #{item.timestamp}                  
                     <hr style='margin-bottom:7px;margin-top:7px'>
-                    <b style='font-size:16px;font-family:"ProximaNova-Semibold";text-transform:uppercase'>#{item.title}</b>
+                    <b style='font-size:18px;font-family:Montserrat,sans-serif;text-transform:uppercase'>#{item.title}</b>
                     p
-                     | <small style='width:100%;letter-spacing:0.065rem;font-family:"NeueHaasUnicaProRegular"'>#{item.description}</small>
+                     | <small style='width:100%;letter-spacing:0.065rem;font-family:Montserrat,sans-serif'>#{item.description}</small>
                      | <br>
-                     | <b>$#{item.price}</b>
+                     | <span style='font-weight:bold;font-size:16px;font-family:Monsterrat, sans-serif;'>$#{item.price}<span>
