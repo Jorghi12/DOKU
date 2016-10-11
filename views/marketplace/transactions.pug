@@ -2,12 +2,13 @@ extends ..\layout
 
 block content
     script(type='text/javascript').
-       function modalUp(imageId, price, description, title){
+       function modalUp(imageId, price, description, title, category){
          document.getElementById("modalImage").src = document.getElementById(imageId).src;
          document.getElementById("modalPrice").value = price;
          document.getElementById("modalDesc").value = description;
          document.getElementById("modalLabel").value = imageId;
          document.getElementById("modalTitle").value = title;
+         document.getElementById("modalCategory").value = category;
        }
 
     h2 My Shopping
@@ -32,7 +33,7 @@ block content
                          p
                          a.btn.btn-primary(style='width:50%',href='/transactions/remove/' + item.itemId,data-transition='fade', data-theme='c')
                           |Remove from listings
-                         a.btn.btn-success(style='width:50%',onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '","' + item.title + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
+                         a.btn.btn-success(style='width:50%',onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '","' + item.title + '","' + item.category + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
                           |Update item description
                          - var buttonType = item.readyForSchedule ? 'btn btn-primary' : 'btn btn-warning'
                          - var buttonText = item.readyForSchedule ? 'Schedule Pickup Time' : 'Waiting for buyers'
@@ -101,7 +102,7 @@ block content
                          input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:134%")
                .col-sm-3(style='margin-left:40px')
                     button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
-                      input.span#category_choice(style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;',name="selectedCategory", value="All Categories") 
+                      input.span#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="All Categories") 
                       span.glyphicon.glyphicon-chevron-down
                     ul.dropdown-menu#drop1(style='margin-left:14px;width:230px')
                       li
@@ -126,3 +127,7 @@ block content
              input(id="modalLabel", name="itemId",style="visibility:hidden;height:0px")
              button.btn.btn-danger(type='button', data-dismiss='modal') Close
              button.btn.btn-primary(type='submit') Update
+           script(text='text/javascript').
+             $("#drop1 li").click(function(e){
+              document.getElementById("modalCategory").value = $(this).text()
+             });

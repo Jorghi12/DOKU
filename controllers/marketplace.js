@@ -206,7 +206,8 @@ exports.updateItem = (req, res) => {
 	Item.findOneAndUpdate({sellerId: req.user._id, _id: req.body.itemId},{
 		price: req.body.itemPrice,
 		description: req.body.itemDescription,
-		title: req.body.itemTitle
+		title: req.body.itemTitle,
+		category: req.body.itemCategory
 	}, function(err, item) {
 		if (err){
 			//Failure Message
@@ -271,7 +272,7 @@ exports.showMyPage = (req, res) => {
 		  var image = item.images[i];
 		  imageStrings.push(image.image.toString('utf8'));
 	  };
-      itemsToSell.push({title: item.title, readyForSchedule: item.buyers.length > 0,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
+      itemsToSell.push({category: item.category, title: item.title, readyForSchedule: item.buyers.length > 0,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
     });
 
 	//Pull the currently bought items.
@@ -288,7 +289,7 @@ exports.showMyPage = (req, res) => {
 						var image = item.images[i];
 						imageStrings.push(image.image.toString('utf8'));
 					};
-					return {title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
+					return {category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
 				});
 				
 				res.render('marketplace/transactions', {
@@ -425,6 +426,7 @@ exports.sellNewItem = (req, res, next) => {
 		description: req.body.description, //The description of the item
 		price: req.body.price, //The price of the item
 		title: req.body.itemTitle, // The title of the item
+		category: req.body.itemCategory, // The category of the item
 		images: []
 	});
 	
