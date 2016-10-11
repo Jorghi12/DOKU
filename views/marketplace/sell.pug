@@ -64,11 +64,14 @@ block content
      form#theFormObject(method='post',enctype='application/json')
            ul.nav.nav-tabs
               li.active
-                a(data-toggle='tab', href='#home') Images
+                a(data-toggle='tab', href='#home') 
+                  span.selltab Images
               li
-                a(data-toggle='tab', href='#menu1') Description & Price
+                a(data-toggle='tab', href='#menu1') 
+                  span.selltab Description & Price
               li
-                a(data-toggle='tab', href='#menu2') Review & Submit
+                a(data-toggle='tab', href='#menu2') 
+                  span.selltab Review & Submit
            .tab-content
               #home.tab-pane.fade.in.active
                 .container-fluid
@@ -81,10 +84,14 @@ block content
                             #image-cropper(style='width:400px;cursor: pointer;')
                                 .cropit-preview(style='width:500px;height:400px')
                                 input.cropit-image-zoom-input(type='range')
-                                span.rotate-cw.glyphicon.glyphicon-repeat(style='float:right')
-                                input.cropit-image-input(type='file',accept="image/*" capture="camera")
-                            button.btn.btn-primary#addimage(type='button',onclick='addImage()') 
-                              .span#addimagetext CROP IMAGE
+                                .row#selectimagebuttons
+                                  label.custom-file-upload
+                                    input.cropit-image-input(type='file',accept="image/*" capture="camera")
+                                    .span#selectimagetext UPLOAD IMAGE                                
+                                  button.btn.btn-primary#addimage(type='button',onclick='addImage()') 
+                                    .span#addimagetext CROP IMAGE
+                                  span.rotate-cw.glyphicon.glyphicon-repeat(style="float:right")
+
               #menu1.tab-pane.fade 
                  .panel-body
                   .container-fluid

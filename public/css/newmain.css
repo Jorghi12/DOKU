@@ -6,10 +6,10 @@ input[type=range] {
     border: 1px solid white;
     
     /*required for proper track sizing in FF*/
-    width: 300px;
+    width: 500px;
 }
 input[type=range]::-webkit-slider-runnable-track {
-    width: 300px;
+    width: 500px;
     height: 5px;
     background: #ddd;
     border: none;
@@ -32,7 +32,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 
 input[type=range]::-moz-range-track {
-    width: 300px;
+    width: 500px;
     height: 5px;
     background: #ddd;
     border: none;
@@ -53,7 +53,7 @@ input[type=range]:-moz-focusring{
 }
 
 input[type=range]::-ms-track {
-    width: 300px;
+    width: 500px;
     height: 5px;
     
     /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
@@ -172,13 +172,6 @@ input.cropit-image-zoom-input{
 	padding-right: 0px;
 }
 
-.btn-primary#addimage {
-	margin-top: 20px;
-	width: 150px;
-	border-radius: 10px;
-	background-color: #5CBFDF;
-	border-color: #5CBFDF;
-}
 
 #addimagetext{
 	font-family: "Montserrat", sans-serif;
@@ -202,3 +195,52 @@ input.cropit-image-zoom-input{
 	padding-top: 10px;
 }
 
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+	width: 150px;
+	border-radius: 10px;
+	background-color: #5cbfdf;
+	border-color: #5cbfdf;
+	cursor: pointer;
+	margin-right: 10px;
+	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.11), 1px 1px 0 rgba(255, 255, 255, 0.21) inset;
+    font-weight: normal;
+    text-align: center;
+    touch-action: manipulation;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    line-height: 1.42857;
+    -webkit-user-select: none;
+}
+
+.btn-primary#addimage {
+	width: 150px;
+	border-radius: 10px;
+	background-color: #df7c5c;
+	border-color: #df7c5c;
+	margin-left: 10px;
+	vertical-align: baseline;
+}
+
+
+#selectimagetext {
+	color: white;
+	font-family: "Montserrat", sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#selectimagebuttons{
+	width: 500px;
+	padding-left: 50px;
+}
+
+.selltab {
+	font-family: Arial;
+	font-size: 14px;
+}
