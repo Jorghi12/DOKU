@@ -17,11 +17,14 @@ block content
      function updateImage(element) {
        //$("#mainProductImage").attr("src",element.src);
      }
+
+
      
     style.
         /* Translucent background image */
         .cropit-preview-background {
           opacity: .2;
+          cursor: auto;
         }
 
         /*
@@ -30,12 +33,10 @@ block content
          */
         input.cropit-image-zoom-input {
           position: relative;
+          width: 500px;
+          margin-top: 10px;
         }
 
-        /* Limit the background image by adding overflow: hidden */
-        #image-cropper {
-          overflow: hidden;
-        }
         
         .cropit-preview {
             background-color: #f8f8f8;
@@ -43,8 +44,6 @@ block content
             border: 1px solid #ccc;
             border-radius: 3px;
             margin-top: 7px;
-            width: 250px;
-            height: 250px;
           }
           .cropit-preview-image-container {
             cursor: move;
@@ -59,79 +58,85 @@ block content
             margin-top: 10px;
           }
 
-    h2 Sell an item
+    h2#sellItem SELL YOUR ITEM
     hr
     .row
      form#theFormObject(method='post',enctype='application/json')
            ul.nav.nav-tabs
               li.active
-                a(data-toggle='tab', href='#home') Photograph
+                a(data-toggle='tab', href='#home') Images
               li
                 a(data-toggle='tab', href='#menu1') Description & Price
               li
-                a(data-toggle='tab', href='#menu2') Submit
+                a(data-toggle='tab', href='#menu2') Review & Submit
            .tab-content
               #home.tab-pane.fade.in.active
-                .panel.panel-primary(style='width:700px;height:530px')
-                    .panel-heading A) Photograph
+                .container-fluid
+                  .row
                     .panel-body 
-                        h3 Upload images of your item.
                         .row
-                         .col-sm-4#uploadedImages
+                         .col-sm-3#uploadedImages
                          
-                         .col-sm-3
+                         .col-sm-6#imagecontainer
                             #image-cropper(style='width:400px;cursor: pointer;')
                                 .cropit-preview(style='width:500px;height:400px')
                                 input.cropit-image-zoom-input(type='range')
                                 span.rotate-cw.glyphicon.glyphicon-repeat(style='float:right')
                                 input.cropit-image-input(type='file',accept="image/*" capture="camera")
-                                .select-image-btn Select new image
-                            button.btn.btn-primary(type='button',onclick='addImage()',style='width:400px;margin-top:5px') Add image
-              #menu1.tab-pane.fade
-                .panel.panel-primary(style='width:560px;height:330px')
-                 .panel-heading B) Description & Price
+                            button.btn.btn-primary#addimage(type='button',onclick='addImage()') 
+                              .span#addimagetext CROP IMAGE
+              #menu1.tab-pane.fade 
                  .panel-body
-                  .row
-                   .col-sm-7
-                        label(for='item_title') Title:
-                            input.form-control(type='text', name='itemTitle',style='width:150%')
-                        label(for='item_desc') Description:
-                            textarea#item_desc.form-control(name='description',rows='5',style="resize:none;width:160%")
-                        p
-                        label(for='item_price') Price:
-                            .input-group
-                             span.input-group-addon $
-                             span.input-group-addon 0.00
-                             input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)',style="resize:none;width:114%")
-                   .col-sm-4
-                    label(for='item_price') Category:
-                    button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px;margin-top:-5px', type='button', data-toggle='dropdown')
-                      input.span#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="All Categories") 
-                      span.glyphicon.glyphicon-chevron-down
-                    ul.dropdown-menu#drop1(style='margin-left:16px;width:215px')
-                      li
-                        a(href='#',style='font-weight:bold') All Categories
-                      li
-                        a(href='#',style='font-weight:bold') Books
-                      li
-                        a(href='#',style='font-weight:bold') Sublets
-                      li
-                        a(href='#',style='font-weight:bold') Technology & Gadgets
-                      li
-                        a(href='#',style='font-weight:bold') Men's Apparel
-                      li
-                        a(href='#',style='font-weight:bold') Women's Apparel
-                      li
-                        a(href='#',style='font-weight:bold') Furniture & Home
-                      li
-                        a(href='#',style='font-weight:bold') Tickets
-                      li
-                        a(href='#',style='font-weight:bold') Ride Share
+                  .container-fluid
+                    .row
+                     .col-sm-7
+                          .row#itemtitle
+                          label(for='item_title') 
+                            span.listingfont Item Title:
+                              input.form-control(type='text', name='itemTitle',style='width:157%')
+                          .row#itemdescription
+                          label(for='item_desc') 
+                            span.listingfont Description:
+                              textarea#item_desc.form-control(name='description',rows='5',style="resize:none;width:170%")
+                          
+                          .row#itemprice
+                          label(for='item_price') 
+                            span.listingfont Price:
+                              .input-group
+                               span.input-group-addon $
+                               span.input-group-addon 0.00
+                               input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)',style="resize:none;width:20%")
+
+                          .row#itemcategory
+                          label(for='item_price') 
+                            span.listingfont Category:
+                          br
+                          button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px;margin-top:-5px', type='button', data-toggle='dropdown')
+                            input.span#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="Select Category") 
+                            span.glyphicon.glyphicon-chevron-down
+
+                          ul.dropdown-menu#drop1(style='margin-left:16px;width:215px')
+                            li
+                              a(href='#',style='font-weight:bold') All Categories
+                            li
+                              a(href='#',style='font-weight:bold') Books
+                            li
+                              a(href='#',style='font-weight:bold') Sublets
+                            li
+                              a(href='#',style='font-weight:bold') Technology & Gadgets
+                            li
+                              a(href='#',style='font-weight:bold') Men's Apparel
+                            li
+                              a(href='#',style='font-weight:bold') Women's Apparel
+                            li
+                              a(href='#',style='font-weight:bold') Furniture & Home
+                            li
+                              a(href='#',style='font-weight:bold') Tickets
+                            li
+                              a(href='#',style='font-weight:bold') Ride Share
               #menu2.tab-pane.fade
-                .panel.panel-primary(style='width:360px;height:100px')
-                    .panel-heading C) One Click Submit
-                    .panel-body 
-                        input.btn.btn-default(style='width:100%',type='submit',value='One Click Submit!',data-transition='fade', data-theme='c')
+                br
+                input.btn.btn-default(style='width:20%',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
 
     script(type='text/javascript').
        $("#drop1 li").click(function(e){
