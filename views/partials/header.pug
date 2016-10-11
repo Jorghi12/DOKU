@@ -1,4 +1,4 @@
-.navbar.navbar-default.navbar-fixed-top
+.navbar.navbar-inverse.navbar-fixed-top
   .container
     .navbar-header
       button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
@@ -7,16 +7,15 @@
         span.icon-bar
         span.icon-bar
       a.navbar-brand(href='/')
-        i.fa.fa-cube
-        | Doku
+        img.logo(src='/doku logo2-on-dark small.png' style='max-width:100px; margin-top: 2px;')        
     .collapse.navbar-collapse
       ul.nav.navbar-nav
-        li(class=(title == 'Catalog') ? 'active' : undefined)
-          a(href='/marketplace') Catalog
         li(class=(title == 'My Shopping') ? 'active' : undefined)
-          a(href='/transactions') My Shopping
+          a(href='/transactions')
+            span.headertab MY SHOPPING
         li(class=(title == 'Contact') ? 'active' : undefined)
-          a(href='/contact') Contact
+          a(href='/contact')
+            span.headertab CONTACT US
         li(class=(title == 'API Examples') ? 'active' : undefined, style='visibility:hidden')
           a(href='/api') API Examples
         li(style='visibility:hidden')
@@ -25,13 +24,16 @@
           a(href='/') Home
 		  
       ul.nav.navbar-nav.navbar-right
-        li(style='background-color:darkblue')
-          a.btn.btn-primary(href='/marketplace/sell', role='button') Sell an item
+        li
+          a.btn.btn-primary#sellbutton(href='/marketplace/sell', role='button') 
+            span.headertab SELL
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)
-            a(href='/login') Login
+            a(href='/login')
+              span.headertab LOGIN
           li(class=(title == 'Create Account') ? 'active' : undefined)
-            a(href='/signup') Create Account
+            a(href='/signup') 
+              span.headertab CREATE ACCOUNT
         else
           li.dropdown(class=(title == 'Account Management') ? 'active' : undefined)
             a.dropdown-toggle(href='#', data-toggle='dropdown')

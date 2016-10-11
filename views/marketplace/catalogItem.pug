@@ -21,10 +21,10 @@ block content
         .col-sm-1
          each image in item.image
           .row
-           img#sideImage(onclick="updateImage(this)", onmouseover="hover(this);", onmouseout="unhover(this)", src=image, height=200, style='height:95px;width:95px;')
+           img#sideImage(onclick="updateImage(this)", onmouseover="hover(this);", onmouseout="unhover(this)", src=image, height=200, style='height:80px;width:100px;')
            <br>
         .col-sm-6
-         img#mainProductImage(src=item.image[0], height=200, style='height:423px;width:500px;')
+         img#mainProductImage(src=item.image[0], height=200, style='height:400px;width:500px;')
          p
         .col-sm-4
          div(style='overflow:hidden;')

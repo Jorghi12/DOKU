@@ -59,7 +59,7 @@ block content
                          
                          .col-sm-3
                             #image-cropper(style='width:400px;cursor: pointer;')
-                                .cropit-preview(style='width:500px;height:300px')
+                                .cropit-preview(style='width:500px;height:400px')
                                 input.cropit-image-zoom-input(type='range')
                                 input.cropit-image-input(type='file',accept="image/*" capture="camera")
                                 .select-image-btn Select new image
@@ -99,7 +99,7 @@ block content
               onmouseout: 'unhover(this)',
               height: '200',
               width: '200',
-              style: 'height:95px;width:95px;margin-right:5px;margin-bottom:5px;'
+              style: 'height:80px;width:100px;margin-right:5px;margin-bottom:5px;'
             });
             img.appendTo('#uploadedImages');
             var imageBase = $('<input/>',{
