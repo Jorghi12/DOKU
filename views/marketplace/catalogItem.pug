@@ -49,10 +49,35 @@ block content
          a.btn.btn-primary(style='width:100%;margin-top:30px', href='/transactions/buy/' + item.itemId,data-transition='fade', data-theme='c')
           |PURCHASE WITH Venmo
          a.btn.btn-warning(style='width:100%;margin-top:5px', onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
-          |MAKE AN OFFER
-         a.btn.btn-warning(style='width:100%;margin-top:5px', onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
           |ASK A QUESTION
          h5(style='font-weight:bold;color:gray;letter-spacing:.075em;margin-top:40px')
           | Comments
-         h5
-          | There are no comments yet.
+         if item.questions
+             each question in item.questions
+               if question.comment
+                .row
+                  b(style='font-weight:bold;letter-spacing:.01em;margin-top:40px;margin-left:15px') Q: #{question.text}
+                  each comment in question.comments
+                      .row
+                       b(style='font-weight:bold;letter-spacing:.01em;margin-top:40px;margin-left:15px') A: #{comment.text}
+         else
+            | There are no comments yet.
+          
+       // Modal
+       #myModal.modal.fade(role='dialog')
+          .modal-dialog
+            // Modal content
+            .modal-content
+             form(action='/marketplace/askquestion', method='post')
+              .modal-header
+                button.close(type='button', data-dismiss='modal') ×
+                h3.modal-title 
+                 | Ask a question about item "#{item.title}"
+              .modal-body
+                .form-group
+                 label(style='width:100%;margin-top:-5px;margin-bottom:5px;font-size:16px') Question:
+                 input#inputlg.form-control.input-lg(name="question_text",placeholder="Enter your question here.",style='font-weight:bold',type='text')
+                 input(type='hidden', name='item_id', value=item.itemId)
+              .modal-footer
+                button.btn.btn-default(type='button', data-dismiss='modal') Close
+                button.btn.btn-warning(type='submit') Ask Question

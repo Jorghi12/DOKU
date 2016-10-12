@@ -142,6 +142,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 /**
  * Marketplace Routes!
  */
+app.post('/marketplace/askquestion', marketController.askQuestion)
 app.post('/marketplace/search', marketController.searchCatalog)
 app.get('/marketplace', marketController.getCatalog);
 app.get('/marketplace/sell', marketController.getSell);
@@ -152,7 +153,7 @@ app.get('/transactions/remove/:itemId', marketController.removeItem);
 app.post('/transactions/update', marketController.updateItem);
 app.get('/transactions/buy/:itemId', marketController.buyItem);
 app.get('/transactions/schedulepickup/:itemId', marketController.schedulePickUp);
-app.get('/transactions/confirmPickup/:itemId', marketController.confirmPickUp);
+app.post('/transactions/confirmPickup', marketController.confirmPickUp);
 
 /**
  * API examples routes.

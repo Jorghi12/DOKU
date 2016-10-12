@@ -28,16 +28,24 @@ block content
          .row
              each item in items
                  .col-sm-4
-                     .panel.panel-default
+                     .panel.panel-default(style="border:1px solid gold")
                        .panel-body
                          img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
                          p
                          a.btn.btn-primary(style='width:50%',href='/transactions/remove/' + item.itemId,data-transition='fade', data-theme='c')
                           |Remove from listings
                          a.btn.btn-success(style='width:50%',onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '","' + item.title + '","' + item.category + '")',data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
-                          |Update item description
-                         - var buttonType = item.readyForSchedule ? 'btn btn-primary' : 'btn btn-warning'
-                         - var buttonText = item.readyForSchedule ? 'Schedule Pickup Time' : 'Waiting for buyers'
+                          |Update description
+                         if item.readyForSchedule
+                           if item.pickup
+                             - var buttonText = 'Change Pickup Time'  
+                             - var buttonType = 'btn btn-default'                         
+                           else
+                             - var buttonText = 'Schedule Pickup Time'
+                             - var buttonType = 'btn btn-primary'
+                         else
+                             - var buttonText = 'Waiting for buyers'
+                             - var buttonType = 'btn btn-warning'
                          - var buttonLink = item.readyForSchedule ? '/transactions/schedulepickup/' + item.itemId : '#'
                          if item.readyForSchedule
                            a(class=buttonType,style='width:100%;margin-top:3px',href=buttonLink,data-transition='fade', data-theme='c')
@@ -48,13 +56,13 @@ block content
          .row
              each item in purchasedItems
                  .col-sm-4
-                     .panel.panel-default(style='background-color: lightblue;height:270px;width:370px')
+                     .panel.panel-default(style='height:270px;width:370px;border:1px solid orange')
                        .panel-body
-                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:337px;')
+                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
                          p
                          a.btn.btn-warning(href='#' + item.itemId,data-transition='fade', data-theme='c')
                           |Waiting for Seller to Confirm
-                         a.btn.btn-success(data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
+                         a.btn.btn-success(href="#")
                           |Ask a Question
       #menu2.tab-pane.fade
         h3 <b>My Transaction History:</b>

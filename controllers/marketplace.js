@@ -7,42 +7,95 @@ const createExtendedFields = require('../models/UserShopInfo').createExtendedFie
 const populateUserShopInfo = require('../models/UserShopInfo').populateUserShopInfo;
 const PickUp = require('../models/PickUps').Pickup;
 
+const Question = require('../models/Comments').Question;
+const Comment = require('../models/Comments').Comments;
+
 /**
- * GET /transactions/confirmPickup/:itemId
+ * POST /comments/askquestion
+ *  - Asks a question about an item in the catalog.
+ */
+exports.askQuestion = (req,res,next) => {
+	if (req.user == null){
+		req.flash('info', { msg: 'Please log in to ask questions about items.' });
+		return res.redirect('back');
+	}
+	
+	// Create a new question document
+	var question = new Question({
+		question   : req.body.question_text,
+		asker: req.user._id,
+		forItem: req.body.item_id,
+		comments : []
+	});
+	
+	// Save the newly created question.
+	question.save((err) => {
+	    if (err) { return next(err); }
+	
+		// Update the item question list.
+		Item.findById(req.body.item_id, function(err, item) {
+			// Add the newly created question.
+			item.questions.push(question);
+
+			//Save the pickUp information
+			item.save(function (err) {
+				if (err) { return next(err); }
+					
+				req.flash('success', { msg: 'Your question has been asked!' });
+				return res.redirect('back');
+			});
+			
+		});
+	});	
+}
+
+
+/**
+ * POST /transactions/confirmPickup
  *  - Adds the pick up date to the admin panel for our team to grab.
  */
 exports.confirmPickUp = (req,res) => {
-	Item.findById(req.params.itemId, function(err, item) {
-		PickUp.findOne({item: req.params.itemId}, function (err, pickUp){
-			if (pickUp){
+	Item.findById(req.body.item_id, function(err, item) {
+		PickUp.findOne({item: req.body.item_id}, function (err, pickUp){
+			if (pickUp && pickUp.inProgress){
 				//A pickup under this item already exists
-				if (pickUp.inProgress){
-					req.flash('errors', { msg: 'Pick up already in progress!'});
-					return res.redirect('/marketplace');
-				}
+				req.flash('errors', { msg: 'Pick up already in progress!'});
+				return res.redirect('/marketplace');
 			}
 			else{
 				//A pickup under the item doesn't already yet exist, create one.
-				var pickUp = new PickUp();
+				pickUp = new PickUp();
 				pickUp.pickupLocation = req.body.pickupLocation;
 				pickUp.pickupDateTime = req.body.pickupDate;
 				pickUp.sellerId = item.sellerId;
 				pickUp.item = item._id;
 			}
 			
-			//Save the pickUp information
+			// Save the pickUp information
 			pickUp.save(function (err) {
 					if (err) {
-						//Cannot purchase your own item
+						//Error.
 						req.flash('errors', { msg: 'Error scheduling a pick up.'});
 						
 						//Show the transactions page
 						return res.redirect('/marketplace');
 					};
 					
+					// Set the pick up field for the item!
+					item.pickup = pickUp;
+					item.save(function (err){
+						if (err) {
+							//Error.
+							req.flash('errors', { msg: 'Error scheduling a pick up.'});
+							
+							//Show the transactions page
+							return res.redirect('/marketplace');
+						};
+						
+						req.flash('success', { msg: 'A PickUp date has been successfully scheduled!'});
+						return exports.showMyPage(req,res);
+					})
 					
-					req.flash('success', { msg: 'Successfully assigned a pick up for your item!'});
-					return res.redirect('/marketplace');
 			});
 		});
 	});
@@ -54,7 +107,13 @@ exports.confirmPickUp = (req,res) => {
  *  - Obtains the item information for full view display
  */
 exports.schedulePickUp = (req, res) => {
-	Item.findById(req.params.itemId, function(err, item) {
+	
+	Item.findById(req.params.itemId).populate(
+			{
+				path:'pickup', model:'Pickup'
+			}
+		).exec(
+	function(err, item) {
 		if (item.sellerId != req.user._id){
 			//Cannot purchase your own item
 			req.flash('errors', { msg: 'Not your item to schedule.'});
@@ -76,8 +135,12 @@ exports.schedulePickUp = (req, res) => {
 			  itemId: item._id, 
 			  image: imageStrings, 
 			  description: item.description, 
-			  price: item.price
+			  price: item.price,
+			  pickup: item.pickup
 	    };
+		
+		console.log("#GAINZ");
+		console.log(item.pickup);
 		
 		res.render('marketplace/scheduleItem', {
 		  title: 'Schedule item Pick Up: ' + item.title,
@@ -93,7 +156,14 @@ exports.schedulePickUp = (req, res) => {
  *  - Obtains the item information for full view display
  */
 exports.itemFullView = (req, res) => {
-	Item.findById(req.params.itemId, function(err, item) {
+	
+	Item.findById({_id: req.params.itemId}).populate(
+			{
+				path:'questions', model:'Question', populate: [{path:'comments', model:'Comment'}]
+			}
+		).exec(
+
+	function (err, item){
 		//Pull the images from the Item
 		var imageStrings = [];
 	    for (var i = 0;i < item.images.length; i++){
@@ -101,13 +171,30 @@ exports.itemFullView = (req, res) => {
 		    imageStrings.push(image.image.toString('utf8'));
 	    };
 		
+		console.log(item.questions)
 		
-	  if (req.user){
-		  var myID = item.sellerId == req.user._id;
-	  }
-	  else{
-		  var myID = false;
-	  };
+		
+		var mapped_questions = [];
+		// Trying out this new cool construct to spice up my programming =)
+		(function(i){
+				mapped_questions.push({
+					text: item.questions[i].question,
+					createdAt: item.questions[i].createdAt,
+					myQuestion: (item.questions[i].asker == req.user._id),
+					comments: item.questions[i].comments
+				})
+				
+			// Recall anonymous function,
+			// and increment counter:
+			if (item.questions[i+1]) arguments.callee(i+1);
+		})(0);
+		
+	    if (req.user){
+		    var myID = item.sellerId == req.user._id;
+	    }
+	    else{
+		    var myID = false;
+     	};
 	  
 	    //Grab the timestamp of the item
 	    var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
@@ -120,9 +207,11 @@ exports.itemFullView = (req, res) => {
 						  description: item.description, 
 						  price: item.price,
 						  title: item.title,
-						  timestamp: timestamp
+						  timestamp: timestamp,
+						  questions: mapped_questions
 	    };
-		
+		console.log("#GAINZ");
+		console.log(mapped_questions);
 		res.render('marketplace/catalogItem', {
 		  title: 'Marketplace: ' + item.title,
 		  item: mappedItem
@@ -272,34 +361,33 @@ exports.showMyPage = (req, res) => {
 		  var image = item.images[i];
 		  imageStrings.push(image.image.toString('utf8'));
 	  };
-      itemsToSell.push({category: item.category, title: item.title, readyForSchedule: item.buyers.length > 0,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
+      itemsToSell.push({pickup: item.pickup, category: item.category, title: item.title, readyForSchedule: item.buyers.length > 0,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
     });
 
 	//Pull the currently bought items.
-	createExtendedFields(req.user, function(){
-			populateUserShopInfo(req.user._id, function(user){
-			//Grab the Item IDs of items the user wants to purchase
-			var itemIDs = user.userShopInfo.buyInfo.itemsBeingPurchased;
+	populateUserShopInfo(req.user._id, function(user){
+		//Grab the Item IDs of items the user wants to purchase
+		var itemIDs = user.userShopInfo.buyInfo.itemsBeingPurchased;
 
-			//Map these itemIDs to actual items
-			Item.find({'_id': { $in: itemIDs}}, function(err, itemsToPurchase){
-				var mappedItemsToPurchase = itemsToPurchase.map(function(item,index){
-					var imageStrings = [];
-					for (var i = 0;i < item.images.length; i++){
-						var image = item.images[i];
-						imageStrings.push(image.image.toString('utf8'));
-					};
-					return {category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
-				});
-				
-				res.render('marketplace/transactions', {
-				  title: 'My Transactions',
-				  items: itemsToSell,
-				  purchasedItems: mappedItemsToPurchase
-				});
+		//Map these itemIDs to actual items
+		Item.find({'_id': { $in: itemIDs}}, function(err, itemsToPurchase){
+			var mappedItemsToPurchase = itemsToPurchase.map(function(item,index){
+				var imageStrings = [];
+				for (var i = 0;i < item.images.length; i++){
+					var image = item.images[i];
+					imageStrings.push(image.image.toString('utf8'));
+				};
+				return {category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
+			});
+			
+			res.render('marketplace/transactions', {
+			  title: 'My Transactions',
+			  items: itemsToSell,
+			  purchasedItems: mappedItemsToPurchase
 			});
 		});
 	});
+
   });
 };
 

@@ -13,9 +13,12 @@ const itemSchema = new mongoose.Schema({
   description: {type: String},
   price: {type: Number},
   images: [imageSchema],
+  pickup: {type: mongoose.Schema.Types.ObjectId, ref: 'Pickup'},
   buyers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], //The IDs of the accounts who want to buy the item.
   title: {type: String, default: ''},
-  category: {type: String, default: ''}
+  category: {type: String, default: ''},
+  deleted: {type: Boolean, default: false},
+  questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}] // List of questions
 }, { timestamps: true });
 
 const Item = mongoose.model('Item', itemSchema);
