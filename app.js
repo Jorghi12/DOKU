@@ -153,7 +153,9 @@ app.get('/transactions/remove/:itemId', marketController.removeItem);
 app.post('/transactions/update', marketController.updateItem);
 app.get('/transactions/buy/:itemId', marketController.buyItem);
 app.get('/transactions/schedulepickup/:itemId', marketController.schedulePickUp);
+app.get('/transactions/scheduledelivery/:itemId', marketController.scheduleDelivery);
 app.post('/transactions/confirmPickup', marketController.confirmPickUp);
+app.post('/transactions/confirmDelivery/', marketController.confirmDelivery);
 
 /**
  * API examples routes.

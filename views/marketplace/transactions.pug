@@ -60,8 +60,21 @@ block content
                        .panel-body
                          img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
                          p
-                         a.btn.btn-warning(href='#' + item.itemId,data-transition='fade', data-theme='c')
-                          |Waiting for Seller to Confirm
+                         if item.sellerConfirmed
+                            if item.buyerConfirmed
+                               - var buttonText = "In Delivery!"
+                               - var buttonType = 'btn btn-default'
+                               - var buttonLink = '#'
+                            else
+                               - var buttonText = "Confirm your delivery"
+                               - var buttonType = 'btn btn-primary'
+                               - var buttonLink = '/transactions/scheduledelivery/' + item.itemId
+                         else
+                           - var buttonText = "Waiting for Seller to Confirm"
+                           - var buttonType = 'btn btn-warning'
+                           - var buttonLink = '#'
+                         a(class=buttonType,href=buttonLink,data-transition='fade', data-theme='c')
+                          | #{buttonText}
                          a.btn.btn-success(href="#")
                           |Ask a Question
       #menu2.tab-pane.fade

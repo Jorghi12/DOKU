@@ -6,6 +6,7 @@ const moment = require('moment');
 const createExtendedFields = require('../models/UserShopInfo').createExtendedFields;
 const populateUserShopInfo = require('../models/UserShopInfo').populateUserShopInfo;
 const PickUp = require('../models/PickUps').Pickup;
+const Delivery = require('../models/Delivery').Delivery;
 
 const Question = require('../models/Comments').Question;
 const Comment = require('../models/Comments').Comments;
@@ -47,6 +48,58 @@ exports.askQuestion = (req,res,next) => {
 			
 		});
 	});	
+}
+
+
+/**
+ * POST /transactions/confirmDelivery
+ *  - Adds the delivery date to the admin panel for our team to grab.
+ */
+exports.confirmDelivery = (req,res) => {
+	Item.findById(req.body.item_id, function(err, item) {
+		Delivery.findOne({item: req.body.item_id}, function (err, delivery){
+			if (delivery && delivery.inProgress){
+				//A delivery under this item already exists
+				req.flash('errors', { msg: 'Delivery already in progress!'});
+				return res.redirect('/marketplace');
+			}
+			else{
+				//A pickup under the item doesn't already yet exist, create one.
+				delivery = new Delivery();
+				delivery.deliveryLocation = req.body.deliveryLocation;
+				delivery.phoneNumber = req.body.deliveryPhoneNumber;
+				delivery.buyerId = req.user._id;
+				delivery.item = item._id;
+			}
+			
+			// Save the pickUp information
+			delivery.save(function (err) {
+					if (err) {
+						//Error.
+						req.flash('errors', { msg: 'Error scheduling a delivery.'});
+						
+						//Show the transactions page
+						return res.redirect('/marketplace');
+					};
+					
+					// Set the pick up field for the item!
+					item.delivery = delivery;
+					item.save(function (err){
+						if (err) {
+							//Error.
+							req.flash('errors', { msg: 'Error scheduling a delivery.'});
+							
+							//Show the transactions page
+							return res.redirect('/marketplace');
+						};
+						
+						req.flash('success', { msg: 'A delivery has been successfully scheduled!'});
+						return exports.showMyPage(req,res);
+					})
+					
+			});
+		});
+	});
 }
 
 
@@ -101,6 +154,50 @@ exports.confirmPickUp = (req,res) => {
 	});
 }
 
+/**
+ * GET /transactions/scheduledelivery/:itemId
+ *  - Obtains the item information for full view display
+ */
+exports.scheduleDelivery = (req, res) => {
+	
+	Item.findById(req.params.itemId).populate(
+			{
+				path:'delivery', model:'Delivery'
+			}
+		).exec(
+	function(err, item) {
+		if (item.sellerId == req.user._id){
+			//Cannot schedule delivery for someone else's item
+			req.flash('errors', { msg: 'You can\'t purchase your own item.'});
+			
+			//Show the transactions page
+			return res.redirect('/marketplace');
+		}
+		
+		//Pull the images from the Item
+		var imageStrings = [];
+	    for (var i = 0;i < item.images.length; i++){
+		    var image = item.images[i];
+		    imageStrings.push(image.image.toString('utf8'));
+	    };
+		
+		//Create the name friendly item map
+		var mappedItem = {
+			  itemId: item._id, 
+			  image: imageStrings, 
+			  description: item.description, 
+			  price: item.price,
+			  delivery: item.delivery
+	    };
+		
+		res.render('marketplace/scheduleDelivery', {
+		  title: 'Schedule delivery for : ' + item.title,
+		  purpose: 'delivery',
+		  item: mappedItem
+		});
+	});
+}
+
 
 /**
  * GET /transactions/schedulepickup/:itemId
@@ -139,9 +236,6 @@ exports.schedulePickUp = (req, res) => {
 			  pickup: item.pickup
 	    };
 		
-		console.log("#GAINZ");
-		console.log(item.pickup);
-		
 		res.render('marketplace/scheduleItem', {
 		  title: 'Schedule item Pick Up: ' + item.title,
 		  purpose: 'pickup',
@@ -175,19 +269,15 @@ exports.itemFullView = (req, res) => {
 		
 		
 		var mapped_questions = [];
-		// Trying out this new cool construct to spice up my programming =)
-		(function(i){
-				mapped_questions.push({
-					text: item.questions[i].question,
-					createdAt: item.questions[i].createdAt,
-					myQuestion: (item.questions[i].asker == req.user._id),
-					comments: item.questions[i].comments
-				})
-				
-			// Recall anonymous function,
-			// and increment counter:
-			if (item.questions[i+1]) arguments.callee(i+1);
-		})(0);
+		
+		for (var i =0;i<item.questions.length;i++){
+			mapped_questions.push({
+				text: item.questions[i].question,
+				createdAt: item.questions[i].createdAt,
+				myQuestion: (item.questions[i].asker == req.user._id),
+				comments: item.questions[i].comments
+			})
+		}
 		
 	    if (req.user){
 		    var myID = item.sellerId == req.user._id;
@@ -377,7 +467,7 @@ exports.showMyPage = (req, res) => {
 					var image = item.images[i];
 					imageStrings.push(image.image.toString('utf8'));
 				};
-				return {category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
+				return {buyerConfirmed: (item.delivery != null),sellerConfirmed: (item.pickup != null),category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
 			});
 			
 			res.render('marketplace/transactions', {

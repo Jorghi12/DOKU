@@ -149,7 +149,7 @@ block content
        $("#drop1 li").click(function(e){
         document.getElementById("modalCategory").value = $(this).text()
        });
-       $imageCropper = $('#image-cropper').cropit();
+       $imageCropper = $('#image-cropper').cropit({ smallImage: 'allow'});
        $('#image-cropper').cropit({ imageBackground: true });
         $('.rotate-cw').click(function() {
           $('#image-cropper').cropit('rotateCW');

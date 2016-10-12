@@ -6,7 +6,8 @@ const pickupSchema = new mongoose.Schema({
   pickupDateTime: {type: String},
   sellerId: {type: String},
   inProgress: {type: Boolean},
-  item: {type: mongoose.Schema.Types.ObjectId, ref: 'Item'}
+  item: {type: mongoose.Schema.Types.ObjectId, ref: 'Item'},
+  phoneNumber: {type: String}
 }, { timestamps: true });
 
 const Pickup = mongoose.model('Pickup', pickupSchema);
