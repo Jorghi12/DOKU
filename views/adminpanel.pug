@@ -8,19 +8,14 @@ block content
   form.form-horizontal(method='POST')
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group
-      label(class='col-sm-2 control-label', for='name') First Name
+      label(class='col-sm-2 control-label', for='venmo') Venmo
       .col-sm-8
-        input.form-control(type='text', name='name', id='name', autofocus=true)
+        input.form-control(type='text', name='venmo', id='venmo', autofocus=true)
     .form-group
-      label(class='col-sm-2 control-label', for='email') Email Address
+      label(class='col-sm-2 control-label', for='deposit') Deposit
       .col-sm-8
-        input.form-control(type='text', name='email', id='email')
-    .form-group
-      label(class='col-sm-2 control-label', for='message') Speak your mind:
-      .col-sm-8
-        textarea.form-control(name='message', id='message', rows='7')
+        input.form-control(type='text', name='deposit', id='deposit')
     .form-group
       .col-sm-offset-2.col-sm-8
         button.btn.btn-primary(type='submit')
-          i.fa.fa-envelope
-          | Send
+          | Insert Deposit

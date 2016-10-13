@@ -22,7 +22,41 @@ const transporter = nodemailer.createTransport({
   },
   tls: {rejectUnauthorized: false}
 });
+
+//Update the venmo information for deliveries.		
+exports.postVenmoDeposit = (req,res) => {
+	//Find the delivery that's using a specific venmo account
+	var venmo = req.body.venmo;
+	var deposit = req.body.deposit;
+	
+	Delivery.findOne({buyerVenmo:venmo}).populate(
+			{
+				path:'item', model:'Item'
+			}
+		).exec(function(err,delivery){
+		if (delivery == null){
+			req.flash('errors', { msg: 'Could not find a delivery associated with the venmo account: ' + venmo + '.'});
+			return res.redirect('/admin');
+		}
+		if (err) {
+			req.flash('errors', { msg: err});
+			return res.redirect('/admin');
+		}
+		if (delivery.item.price == deposit){
+			delivery.sentDeposit = true;
+			delivery.depositAmount = deposit;
+			delivery.save(function (err){
+				req.flash('success', { msg: 'Successfully verified the deposit value: $' + deposit + ' of venmo account "' + venmo + '".' });
+				return res.redirect('/admin');
+			})
+		}
+		else{
+			req.flash('errors', { msg: 'The price is not enough. Venmo user provided $' + deposit + '. The item costs $' + delivery.item.price + '.'});
+			return res.redirect('/admin');
+		}
 		
+	})
+}
 
 exports.getAdminPanel = (req, res) => {
   //Need some security to verify if they belong on our team... ;)

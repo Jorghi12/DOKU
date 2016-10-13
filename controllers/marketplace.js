@@ -188,7 +188,7 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
 	//Send email to the buyer
 	const toBuyerEmail = {
 	  to: buyerEmail,
-	  from: buyerEmail.name + ' <hello@dokumarket.com>',
+	  from: buyerMessage.name + ' <hello@dokumarket.com>',
 	  subject: 'Complete! | dokumarket.com',
 	  text: buyerMessage.body
 	};
@@ -197,7 +197,7 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
 	//Send email to the seller
 	const toSellerEmail = {
 	  to: sellerEmail,
-	  from: sellerEmail.name + ' <hello@dokumarket.com>',
+	  from: sellerMessage.name + ' <hello@dokumarket.com>',
 	  subject: 'Complete! | dokumarket.com',
 	  text: sellerMessage.body
 	};
@@ -210,7 +210,11 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
  *  - Adds the pick up date to the admin panel for our team to grab.
  */
 exports.confirmPickUp = (req,res) => {
-	Item.findById(req.body.item_id, function(err, item) {
+	Item.findById(req.body.item_id).populate(
+			{
+				path:'delivery', model:'Delivery'
+			}
+		).exec(function(err, item) {
 		PickUp.findOne({item: req.body.item_id}, function (err, pickUp){
 			if (pickUp && pickUp.inProgress){
 				//A pickup under this item already exists
@@ -252,7 +256,7 @@ exports.confirmPickUp = (req,res) => {
 						var theDelivery = null;
 						for (var i=0;i<item.delivery.length;i++){
 							if (item.delivery[i].sentDeposit){
-								theDelivery = delivery;
+								theDelivery = item.delivery[i];
 								break;
 							}
 						}

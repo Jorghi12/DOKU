@@ -144,6 +144,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  * Marketplace Routes!
  */
 app.get('/admin', adminController.getAdminPanel);
+app.post('/admin', adminController.postVenmoDeposit);
 app.post('/marketplace/askquestion', marketController.askQuestion)
 app.post('/marketplace/search', marketController.searchCatalog)
 app.get('/marketplace', marketController.getCatalog);
