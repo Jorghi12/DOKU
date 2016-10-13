@@ -180,11 +180,18 @@ exports.sendEmailToBuyerAskingForVenmo = (req, res) =>{
 
 // Used by exports.confirmPickUp
 // This occurs when the buyer's venmo payment has been received.
-exports.notifyBothBuyerAndSellerOfTransaction = (req, res) => {
-	var buyerEmail;
-	var sellerEmail;
-	var buyerMessage;
-	var sellerMessage;
+exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, pickup) => {
+	var buyerEmail = buyer.email;
+	var sellerEmail = seller.email;
+	
+	if (seller.profile){seller_name = seller.profile.name} else {seller_name = ""}
+	if (buyer.profile){buyer_name = buyer.profile.name} else {buyer_name = ""}
+	var item_name = item.title;
+	var pickup_address = pickup.pickupLocation;
+	var pickup_time = pickup.pickupDateTime;
+	
+	var buyerMessage = EMAIL_CONSTANTS.finalConfirmationBuyer(buyer_name);
+	var sellerMessage = EMAIL_CONSTANTS.finalConfirmationSeller(seller_name,item_name,pickup_address,pickup_time);
 	
 	const nodemailer = require('nodemailer');
 	const transporter = nodemailer.createTransport({
@@ -198,8 +205,8 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res) => {
 	//Send email to the buyer
 	const toBuyerEmail = {
 	  to: buyerEmail,
-	  from: 'Hello <hello@dokumarket.com>',
-	  subject: 'Contact Form | dokumarket.com',
+	  from: buyerEmail.name + ' <hello@dokumarket.com>',
+	  subject: 'Complete! | dokumarket.com',
 	  text: buyerMessage
 	};
 	transporter.sendMail(toBuyerEmail);
@@ -207,8 +214,8 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res) => {
 	//Send email to the seller
 	const toSellerEmail = {
 	  to: sellerEmail,
-	  from: 'Hello <hello@dokumarket.com>',
-	  subject: 'Contact Form | dokumarket.com',
+	  from: sellerEmail.name + ' <hello@dokumarket.com>',
+	  subject: 'Complete! | dokumarket.com',
 	  text: sellerMessage
 	};
 	transporter.sendMail(toSellerEmail);
@@ -259,8 +266,18 @@ exports.confirmPickUp = (req,res) => {
 						
 						req.flash('success', { msg: 'A PickUp date has been successfully scheduled!'});
 						
-						// Send Confirmation to both the Buyer and the Seller!
-						//exports.notifyBothBuyerAndSellerOfTransaction(req,res);
+						var theDelivery = null;
+						for (var i=0;i<item.delivery.length;i++){
+							if (item.delivery[i].sentDeposit){
+								theDelivery = delivery;
+								break;
+							}
+						}
+						
+						var buyer = User.findById(theDelivery.buyerId, function(err, buyer){
+							// Send Confirmation to both the Buyer and the Seller!
+							exports.notifyBothBuyerAndSellerOfTransaction(req, res, buyer, req.user, item, pickUp);
+						}
 						return exports.showMyPage(req,res);
 					})
 					
