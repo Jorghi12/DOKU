@@ -14,7 +14,7 @@ const itemSchema = new mongoose.Schema({
   price: {type: Number},
   images: [imageSchema],
   pickup: {type: mongoose.Schema.Types.ObjectId, ref: 'Pickup'},
-  delivery: {type: mongoose.Schema.Types.ObjectId, ref: 'Delivery'},
+  delivery: [{type: mongoose.Schema.Types.ObjectId, ref: 'Delivery'}], //The delivery requests from buyers
   buyers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], //The IDs of the accounts who want to buy the item.
   title: {type: String, default: ''},
   category: {type: String, default: ''},

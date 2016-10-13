@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
   userShopInfo: {type: mongoose.Schema.Types.ObjectId, ref: 'UserExtension'},
 }, { timestamps: true });
 
+
 /**
  * Password hash middleware.
  */

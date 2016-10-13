@@ -25,5 +25,10 @@ block content
          input(style='font-size:20px;font-weight:bold',type='text', name='deliveryPhoneNumber', value=old_loc, placeholder='Your Phone Number')
         <br>  
         <br>
+        label(for='deliveryVenmoAccount') Venmo Account:  
+        <br>
+         - var old_loc = item.delivery ? item.delivery.buyerVenmo : ''
+         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryVenmoAccount', value=old_loc, placeholder='Your Venmo Account')
+        <br>  
         button.btn.btn-primary(type='submit', style='width:265px')
          |Confirm Delivery

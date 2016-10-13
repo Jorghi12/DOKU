@@ -13,6 +13,7 @@ const OAuthStrategy = require('passport-oauth').OAuthStrategy;
 const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
 const User = require('../models/User');
+const createExtendedFields = require('../models/UserShopInfo').createExtendedFields;
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -110,7 +111,10 @@ passport.use(new FacebookStrategy({
           user.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
           user.profile.location = (profile._json.location) ? profile._json.location.name : '';
           user.save((err) => {
-            done(err, user);
+			// Add Extended fields to the user.
+			createExtendedFields(user, function() { 
+				done(err, user);
+			});
           });
         }
       });
@@ -169,7 +173,10 @@ passport.use(new GitHubStrategy({
           user.profile.location = profile._json.location;
           user.profile.website = profile._json.blog;
           user.save((err) => {
-            done(err, user);
+            // Add Extended fields to the user.
+			createExtendedFields(user, function() { 
+				done(err, user);
+			});
           });
         }
       });
@@ -224,7 +231,10 @@ passport.use(new TwitterStrategy({
       user.profile.location = profile._json.location;
       user.profile.picture = profile._json.profile_image_url_https;
       user.save((err) => {
-        done(err, user);
+        // Add Extended fields to the user.
+		createExtendedFields(user, function() { 
+			done(err, user);
+		});
       });
     });
   }
@@ -280,7 +290,10 @@ passport.use(new GoogleStrategy({
           user.profile.gender = profile._json.gender;
           user.profile.picture = profile._json.image.url;
           user.save((err) => {
-            done(err, user);
+            // Add Extended fields to the user.
+			createExtendedFields(user, function() { 
+				done(err, user);
+			});
           });
         }
       });
@@ -342,7 +355,10 @@ passport.use(new LinkedInStrategy({
           user.profile.picture = profile._json.pictureUrl;
           user.profile.website = profile._json.publicProfileUrl;
           user.save((err) => {
-            done(err, user);
+            // Add Extended fields to the user.
+			createExtendedFields(user, function() { 
+				done(err, user);
+			});
           });
         }
       });
@@ -397,7 +413,10 @@ passport.use(new InstagramStrategy({
       user.profile.website = profile._json.data.website;
       user.profile.picture = profile._json.data.profile_picture;
       user.save((err) => {
-        done(err, user);
+        // Add Extended fields to the user.
+		createExtendedFields(user, function() { 
+			done(err, user);
+		});
       });
     });
   }
@@ -479,7 +498,10 @@ passport.use(new OpenIDStrategy({
           done(err, user);
         });
       } else {
-        done(error, null);
+        // Add Extended fields to the user.
+		createExtendedFields(user, function() { 
+			done(err, user);
+		});
       }
     });
   });

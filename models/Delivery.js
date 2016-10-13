@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const deliverySchema = new mongoose.Schema({
   deliveryLocation: {type: String},
   buyerId: {type: String},
+  buyerVenmo: {type: String},
+  sentDeposit: {type: Boolean, default: false},
+  depositAmount: {type: Number},
   inProgress: {type: Boolean},
   item: {type: mongoose.Schema.Types.ObjectId, ref: 'Item'},
   phoneNumber: {type: String}

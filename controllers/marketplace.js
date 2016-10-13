@@ -11,6 +11,8 @@ const Delivery = require('../models/Delivery').Delivery;
 const Question = require('../models/Comments').Question;
 const Comment = require('../models/Comments').Comments;
 
+const EMAIL_CONSTANTS = require('../email_strings/Emails');
+
 /**
  * POST /comments/askquestion
  *  - Asks a question about an item in the catalog.
@@ -57,17 +59,26 @@ exports.askQuestion = (req,res,next) => {
  */
 exports.confirmDelivery = (req,res) => {
 	Item.findById(req.body.item_id, function(err, item) {
-		Delivery.findOne({item: req.body.item_id}, function (err, delivery){
+		Delivery.findOne({item: req.body.item_id, buyerId: req.user._id}, function (err, delivery){
 			if (delivery && delivery.inProgress){
 				//A delivery under this item already exists
 				req.flash('errors', { msg: 'Delivery already in progress!'});
 				return res.redirect('/marketplace');
 			}
+			else if (delivery){
+				//Use existing delivery document.
+				delivery.deliveryLocation = req.body.deliveryLocation;
+				delivery.phoneNumber = req.body.deliveryPhoneNumber;
+				delivery.buyerVenmo = req.body.deliveryVenmoAccount;
+				delivery.buyerId = req.user._id;
+				delivery.item = item._id;
+			}
 			else{
-				//A pickup under the item doesn't already yet exist, create one.
+				//A delivery with your buyer id doesn't exit yet.
 				delivery = new Delivery();
 				delivery.deliveryLocation = req.body.deliveryLocation;
 				delivery.phoneNumber = req.body.deliveryPhoneNumber;
+				delivery.buyerVenmo = req.body.deliveryVenmoAccount;
 				delivery.buyerId = req.user._id;
 				delivery.item = item._id;
 			}
@@ -83,7 +94,7 @@ exports.confirmDelivery = (req,res) => {
 					};
 					
 					// Set the pick up field for the item!
-					item.delivery = delivery;
+					item.delivery.push(delivery);
 					item.save(function (err){
 						if (err) {
 							//Error.
@@ -93,13 +104,114 @@ exports.confirmDelivery = (req,res) => {
 							return res.redirect('/marketplace');
 						};
 						
-						req.flash('success', { msg: 'A delivery has been successfully scheduled!'});
+						req.flash('success', { msg: 'A purchase request has been sent!'});
+						
+						// Send an email to the buyer asking for Venmo Payment and what's next.
+						exports.sendEmailToBuyerAskingForVenmo(req,res);
+						
+						// Send an email to the seller asking for confirmation of Item Availability.
+						exports.sendEmailToSellerAskingForAvailability(req,res,item);
+						
 						return exports.showMyPage(req,res);
 					})
 					
 			});
 		});
 	});
+}
+
+// Occurs when a buyer confirms a delivery. Asks the seller for item availability.
+exports.sendEmailToSellerAskingForAvailability = (req, res, sellerEmail, item) => {
+	User.findOne({_id: item.sellerId}, function(err, seller){
+		var sellerEmail = seller.email;
+		var item_name = item.title;
+		var itemId = item._id;
+		var confirmation_link = req.headers.host + "/transactions/schedulepickup/" + itemId;
+		
+		var sellerMessage = EMAIL_CONSTANTS.sellerAvailaibilityMessage(item_name,confirmation_link);
+		
+		const nodemailer = require('nodemailer');
+		const transporter = nodemailer.createTransport({
+		  service: 'SendGrid',
+		  auth: {
+			user: process.env.SENDGRID_USER,
+			pass: process.env.SENDGRID_PASSWORD
+		  }
+		});
+
+		//Send email to the buyer
+		const toSellerEmail = {
+		  to: sellerEmail,
+		  from: sellerMessage.name + ' <hello@dokumarket.com>',
+		  subject: 'Item Availability | dokumarket.com',
+		  text: sellerMessage
+		};
+		transporter.sendMail(toSellerEmail);
+	})
+}
+
+// Occurs when the buyer confirms a delivery. Alerts us to send a personalized email.
+exports.sendEmailToBuyerAskingForVenmo = (req, res) =>{
+	var buyerEmail = req.user.email;
+	var thename = "";
+	if (req.user.profile){
+		thename = req.user.profile.name;
+	}
+	var buyerMessage = EMAIL_CONSTANTS.buyerVenmoMessage(thename);
+	
+	const nodemailer = require('nodemailer');
+	const transporter = nodemailer.createTransport({
+	  service: 'SendGrid',
+	  auth: {
+		user: process.env.SENDGRID_USER,
+		pass: process.env.SENDGRID_PASSWORD
+	  }
+	});
+
+	//Send email to the buyer
+	const toBuyerEmail = {
+	  to: buyerEmail,
+	  from: buyerMessage.name + ' <hello@dokumarket.com>',
+	  subject: 'Venmo Instructions | dokumarket.com',
+	  text: buyerMessage
+	};
+	transporter.sendMail(toBuyerEmail);
+}
+
+// Used by exports.confirmPickUp
+// This occurs when the buyer's venmo payment has been received.
+exports.notifyBothBuyerAndSellerOfTransaction = (req, res) => {
+	var buyerEmail;
+	var sellerEmail;
+	var buyerMessage;
+	var sellerMessage;
+	
+	const nodemailer = require('nodemailer');
+	const transporter = nodemailer.createTransport({
+	  service: 'SendGrid',
+	  auth: {
+		user: process.env.SENDGRID_USER,
+		pass: process.env.SENDGRID_PASSWORD
+	  }
+	});
+
+	//Send email to the buyer
+	const toBuyerEmail = {
+	  to: buyerEmail,
+	  from: 'Hello <hello@dokumarket.com>',
+	  subject: 'Contact Form | dokumarket.com',
+	  text: buyerMessage
+	};
+	transporter.sendMail(toBuyerEmail);
+
+	//Send email to the seller
+	const toSellerEmail = {
+	  to: sellerEmail,
+	  from: 'Hello <hello@dokumarket.com>',
+	  subject: 'Contact Form | dokumarket.com',
+	  text: sellerMessage
+	};
+	transporter.sendMail(toSellerEmail);
 }
 
 
@@ -146,6 +258,9 @@ exports.confirmPickUp = (req,res) => {
 						};
 						
 						req.flash('success', { msg: 'A PickUp date has been successfully scheduled!'});
+						
+						// Send Confirmation to both the Buyer and the Seller!
+						//exports.notifyBothBuyerAndSellerOfTransaction(req,res);
 						return exports.showMyPage(req,res);
 					})
 					
@@ -181,13 +296,21 @@ exports.scheduleDelivery = (req, res) => {
 		    imageStrings.push(image.image.toString('utf8'));
 	    };
 		
+		//Find the delivery associated with the item. (Do this in Mongo later)
+		var delivery = null;
+		for (var i =0;i<item.delivery.length;i++){
+			if (item.delivery[i].buyerId == req.user._id){
+				delivery = item.delivery[i];
+				break;
+			}
+		}
 		//Create the name friendly item map
 		var mappedItem = {
 			  itemId: item._id, 
 			  image: imageStrings, 
 			  description: item.description, 
 			  price: item.price,
-			  delivery: item.delivery
+			  delivery: delivery
 	    };
 		
 		res.render('marketplace/scheduleDelivery', {
@@ -363,11 +486,8 @@ exports.buyItem = (req, res) => {
 								req.flash('errors', { msg: 'Failed to purchase item.' });
 							}
 							
-							//Success!
-							req.flash('success', { msg: 'Item successfully bought!' });
-							
-							//Show the transactions page
-							exports.showMyPage(req,res);
+							//Directly get the buyer to schedule a delivery!
+							exports.scheduleDelivery(req, res);
 						});
 					}
 				)
@@ -441,7 +561,12 @@ exports.showMyPage = (req, res) => {
 		});
 		return;
 	}
-	Item.find({sellerId: req.user._id}, function(err, items) {
+	Item.find({sellerId: req.user._id}).populate(
+			{
+				path:'delivery', model:'Delivery'
+			}
+		).exec(
+function(err, items) {
     var itemsToSell = [];
 	
 	//Pull the currently selling items.
@@ -451,7 +576,15 @@ exports.showMyPage = (req, res) => {
 		  var image = item.images[i];
 		  imageStrings.push(image.image.toString('utf8'));
 	  };
-      itemsToSell.push({pickup: item.pickup, category: item.category, title: item.title, readyForSchedule: item.buyers.length > 0,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
+	  //Has someone paid?
+	  var someonePaid = false;
+	  for (var i =0;i<item.delivery.length;i++){
+		  if (item.delivery[i].sentDeposit){
+			  someonePaid = true;
+			  break;
+		  }
+	  }
+      itemsToSell.push({pickup: item.pickup, category: item.category, title: item.title, readyForSchedule: someonePaid,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
     });
 
 	//Pull the currently bought items.
@@ -460,14 +593,25 @@ exports.showMyPage = (req, res) => {
 		var itemIDs = user.userShopInfo.buyInfo.itemsBeingPurchased;
 
 		//Map these itemIDs to actual items
-		Item.find({'_id': { $in: itemIDs}}, function(err, itemsToPurchase){
+		Item.find({'_id': { $in: itemIDs}}).populate(
+			{
+				path:'delivery', model:'Delivery'
+			}
+		).exec(function(err, itemsToPurchase) {
 			var mappedItemsToPurchase = itemsToPurchase.map(function(item,index){
 				var imageStrings = [];
 				for (var i = 0;i < item.images.length; i++){
 					var image = item.images[i];
 					imageStrings.push(image.image.toString('utf8'));
 				};
-				return {buyerConfirmed: (item.delivery != null),sellerConfirmed: (item.pickup != null),category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
+				var depositSent = false;
+				for (var i =0;i<item.delivery.length;i++){
+					if (item.delivery[i].buyerId == req.user._id){
+						depositSent = item.delivery[i].sentDeposit;
+						break;
+					}
+				}
+				return {waitingOnDeposit: !depositSent,sellerConfirmed: (item.pickup != null),category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
 			});
 			
 			res.render('marketplace/transactions', {
@@ -604,7 +748,7 @@ exports.sellNewItem = (req, res, next) => {
 		description: req.body.description, //The description of the item
 		price: req.body.price, //The price of the item
 		title: req.body.itemTitle, // The title of the item
-		category: req.body.itemCategory, // The category of the item
+		category: req.body.itemCategory == 'Select Category' ? 'All Categories' : req.body.itemCategory, // The category of the item
 		images: []
 	});
 	

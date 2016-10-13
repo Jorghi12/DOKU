@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const User = require('../models/User');
+const User = require('./User');
 
 //Create the UserExtension Schema
 var userExtendSchema = new mongoose.Schema({
@@ -34,7 +34,8 @@ exports.populateUserShopInfo = function(userId, callback){
 		}
 		).exec(function (err, userPopulated){
 			callback(userPopulated);
-		});
+		}
+	);
 }
 exports.createExtendedFields = function(user, callback){
   var buyerExt = new buyerExtension({userID: user._id});
@@ -42,11 +43,17 @@ exports.createExtendedFields = function(user, callback){
   var userExt = new userExtension({userID: user._id, buyInfo: buyerExt._id, sellInfo: sellerExt._id});
   
   buyerExt.save(function (err){
+    if (err) {
+		console.log("1. Error creating account! Cannot add final fields.");
+	};
 	sellerExt.save(function (err){
+		if (err) {
+			console.log("2. Error creating account! Cannot add final fields.");
+		};
 		userExt.save(
 			function (err) {
 				if (err) {
-					console.log("Error creating account! Cannot add final fields.");
+					console.log("3. Error creating account! Cannot add final fields.");
 				};
 				User.findOneAndUpdate({_id: user._id},{userShopInfo: userExt._id}, function (){		
 					User.findOne({_id: user._id}).populate(
