@@ -12,7 +12,17 @@ const Question = require('../models/Comments').Question;
 const Comment = require('../models/Comments').Comments;
 
 const EMAIL_CONSTANTS = require('../email_strings/Emails');
-
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  host: 'smtp.dokumarket.com',
+  port: 25,
+  auth: {
+	user: process.env.DOKUMARKET_EMAIL_USER,
+	pass: process.env.DOKUMARKET_EMAIL_PASSWORD
+  },
+  tls: {rejectUnauthorized: false}
+});
+		
 /**
  * POST /comments/askquestion
  *  - Asks a question about an item in the catalog.
@@ -121,7 +131,7 @@ exports.confirmDelivery = (req,res) => {
 }
 
 // Occurs when a buyer confirms a delivery. Asks the seller for item availability.
-exports.sendEmailToSellerAskingForAvailability = (req, res, sellerEmail, item) => {
+exports.sendEmailToSellerAskingForAvailability = (req, res, item) => {
 	User.findOne({_id: item.sellerId}, function(err, seller){
 		var sellerEmail = seller.email;
 		var item_name = item.title;
@@ -130,21 +140,12 @@ exports.sendEmailToSellerAskingForAvailability = (req, res, sellerEmail, item) =
 		
 		var sellerMessage = EMAIL_CONSTANTS.sellerAvailaibilityMessage(item_name,confirmation_link);
 		
-		const nodemailer = require('nodemailer');
-		const transporter = nodemailer.createTransport({
-		  service: 'SendGrid',
-		  auth: {
-			user: process.env.SENDGRID_USER,
-			pass: process.env.SENDGRID_PASSWORD
-		  }
-		});
-
 		//Send email to the buyer
 		const toSellerEmail = {
 		  to: sellerEmail,
 		  from: sellerMessage.name + ' <hello@dokumarket.com>',
 		  subject: 'Item Availability | dokumarket.com',
-		  text: sellerMessage
+		  text: sellerMessage.body
 		};
 		transporter.sendMail(toSellerEmail);
 	})
@@ -154,26 +155,17 @@ exports.sendEmailToSellerAskingForAvailability = (req, res, sellerEmail, item) =
 exports.sendEmailToBuyerAskingForVenmo = (req, res) =>{
 	var buyerEmail = req.user.email;
 	var thename = "";
-	if (req.user.profile){
+	if (req.user.profile && req.user.profile.name){
 		thename = req.user.profile.name;
 	}
 	var buyerMessage = EMAIL_CONSTANTS.buyerVenmoMessage(thename);
-	
-	const nodemailer = require('nodemailer');
-	const transporter = nodemailer.createTransport({
-	  service: 'SendGrid',
-	  auth: {
-		user: process.env.SENDGRID_USER,
-		pass: process.env.SENDGRID_PASSWORD
-	  }
-	});
 
 	//Send email to the buyer
 	const toBuyerEmail = {
 	  to: buyerEmail,
 	  from: buyerMessage.name + ' <hello@dokumarket.com>',
 	  subject: 'Venmo Instructions | dokumarket.com',
-	  text: buyerMessage
+	  text: buyerMessage.body
 	};
 	transporter.sendMail(toBuyerEmail);
 }
@@ -184,8 +176,8 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
 	var buyerEmail = buyer.email;
 	var sellerEmail = seller.email;
 	
-	if (seller.profile){seller_name = seller.profile.name} else {seller_name = ""}
-	if (buyer.profile){buyer_name = buyer.profile.name} else {buyer_name = ""}
+	if (seller.profile && seller.profile.name){seller_name = seller.profile.name} else {seller_name = ""}
+	if (buyer.profile && buyer.profile.name){buyer_name = buyer.profile.name} else {buyer_name = ""}
 	var item_name = item.title;
 	var pickup_address = pickup.pickupLocation;
 	var pickup_time = pickup.pickupDateTime;
@@ -193,21 +185,12 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
 	var buyerMessage = EMAIL_CONSTANTS.finalConfirmationBuyer(buyer_name);
 	var sellerMessage = EMAIL_CONSTANTS.finalConfirmationSeller(seller_name,item_name,pickup_address,pickup_time);
 	
-	const nodemailer = require('nodemailer');
-	const transporter = nodemailer.createTransport({
-	  service: 'SendGrid',
-	  auth: {
-		user: process.env.SENDGRID_USER,
-		pass: process.env.SENDGRID_PASSWORD
-	  }
-	});
-
 	//Send email to the buyer
 	const toBuyerEmail = {
 	  to: buyerEmail,
 	  from: buyerEmail.name + ' <hello@dokumarket.com>',
 	  subject: 'Complete! | dokumarket.com',
-	  text: buyerMessage
+	  text: buyerMessage.body
 	};
 	transporter.sendMail(toBuyerEmail);
 
@@ -216,7 +199,7 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
 	  to: sellerEmail,
 	  from: sellerEmail.name + ' <hello@dokumarket.com>',
 	  subject: 'Complete! | dokumarket.com',
-	  text: sellerMessage
+	  text: sellerMessage.body
 	};
 	transporter.sendMail(toSellerEmail);
 }

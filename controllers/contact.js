@@ -1,10 +1,12 @@
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
-  service: 'SendGrid',
+  host: 'smtp.dokumarket.com',
+  port: 25,
   auth: {
-    user: process.env.SENDGRID_USER,
-    pass: process.env.SENDGRID_PASSWORD
-  }
+	user: process.env.DOKUMARKET_EMAIL_USER,
+	pass: process.env.DOKUMARKET_EMAIL_PASSWORD
+  },
+  tls: {rejectUnauthorized: false}
 });
 
 /**
@@ -34,9 +36,9 @@ exports.postContact = (req, res) => {
   }
 
   const mailOptions = {
-    to: 'jd728@cornell.edu',
+    to: process.env.DOKUMARKET_EMAIL_USER,
     from: `${req.body.name} <${req.body.email}>`,
-    subject: 'Contact Form | Hackathon Starter',
+    subject: 'Contact Form | Doku Market',
     text: req.body.message
   };
 

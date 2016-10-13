@@ -44,7 +44,7 @@ exports.sellerAvailaibilityMessage = (item_name,confirmation_link) => {
 	
 	//Parse body
 	message.body = message.body.replace("%item_name%",item_name);
-	message.body = message.body.replace("*insert link to confirmation*",confirmation_link);
+	message.body = message.body.replace("*insert link to confirmation*","<a href='" + confirmation_link + "'></a>");
 	
 	return message;
 }
@@ -67,7 +67,7 @@ exports.finalConfirmationBuyer = (buyer_name) => {
 	var message = {
 		body: CONST_finalBuyerMessage, 
 		subject: 'Your item is on its way!',
-		from: 'Julian from Doku'
+		name: 'Julian from Doku'
 	};
 	
 	//Parse body

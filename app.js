@@ -36,6 +36,7 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
+const adminController = require('./controllers/admin');
 
 /**
  * API keys and Passport configuration.
@@ -142,6 +143,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 /**
  * Marketplace Routes!
  */
+app.get('/admin', adminController.getAdminPanel);
 app.post('/marketplace/askquestion', marketController.askQuestion)
 app.post('/marketplace/search', marketController.searchCatalog)
 app.get('/marketplace', marketController.getCatalog);
