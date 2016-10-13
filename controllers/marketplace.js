@@ -274,10 +274,10 @@ exports.confirmPickUp = (req,res) => {
 							}
 						}
 						
-						var buyer = User.findById(theDelivery.buyerId, function(err, buyer){
+						User.findById(theDelivery.buyerId, function(err, buyer){
 							// Send Confirmation to both the Buyer and the Seller!
 							exports.notifyBothBuyerAndSellerOfTransaction(req, res, buyer, req.user, item, pickUp);
-						}
+						});
 						return exports.showMyPage(req,res);
 					})
 					
