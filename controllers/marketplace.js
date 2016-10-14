@@ -401,7 +401,7 @@ exports.itemFullView = (req, res) => {
 			mapped_questions.push({
 				text: item.questions[i].question,
 				createdAt: item.questions[i].createdAt,
-				myQuestion: (item.questions[i].asker == req.user._id),
+				myQuestion: (req.user && (item.questions[i].asker == req.user._id)),
 				comments: item.questions[i].comments
 			})
 		}
