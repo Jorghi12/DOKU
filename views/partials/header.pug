@@ -31,9 +31,6 @@
           li(class=(title == 'Login') ? 'active' : undefined)
             a(href='/login')
               span.headertab LOGIN
-          li(class=(title == 'Create Account') ? 'active' : undefined)
-            a(href='/signup') 
-              span.headertab CREATE ACCOUNT
         else
           li.dropdown(class=(title == 'Account Management') ? 'active' : undefined)
             a.dropdown-toggle(href='#', data-toggle='dropdown')

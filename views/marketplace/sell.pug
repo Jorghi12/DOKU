@@ -1,8 +1,30 @@
 extends ..\layout
 
 block content
-
-  .page-header
+    style.
+     .img-wrap {
+     position: relative;
+     display: inline-block;
+     font-size: 0;
+     }
+     .img-wrap .close {
+     color: red
+     opacity: .2;
+     }
+     .img-wrap:hover .close {
+     opacity: 1;
+     color: yellow
+     }
+     .navigationButton {
+      color:blue;
+      background:white;
+      font-size:100px;
+     }
+     .navigationButton:hover  {
+      color:green;
+      background:white;
+      font-size:100px;
+     }
     script(type='text/javascript').
      function hover(element) {
        element.style.outline = '3px solid yellow';
@@ -62,16 +84,10 @@ block content
     hr
     .row
      form#theFormObject(method='post',enctype='application/json')
-           ul.nav.nav-tabs
-              li.active
+           ul.nav.nav-tabs(style='visibility:hidden;')
                 a(data-toggle='tab', href='#home') 
-                  span.selltab Images
-              li
                 a(data-toggle='tab', href='#menu1') 
-                  span.selltab Description & Price
-              li
                 a(data-toggle='tab', href='#menu2') 
-                  span.selltab Review & Submit
            .tab-content
               #home.tab-pane.fade.in.active
                 .container-fluid
@@ -87,15 +103,21 @@ block content
                                 .row#selectimagebuttons
                                   label.custom-file-upload
                                     input.cropit-image-input(type='file',accept="image/*" capture="camera")
-                                    .span#selectimagetext UPLOAD IMAGE                                
+                                    .span#selectimagetext SELECT FILE                                
                                   button.btn.btn-primary#addimage(type='button',onclick='addImage()') 
-                                    .span#addimagetext CROP IMAGE
+                                    .span#addimagetext ADD IMAGE
                                   span.rotate-cw.glyphicon.glyphicon-repeat(style="float:right")
+                         .col-sm-2
+                             a.navigationButton#pg1RightButton(href="#")
+                                span.glyphicon.glyphicon-arrow-right(style='margin-top:380px;margin-left:80px')
 
               #menu1.tab-pane.fade 
                  .panel-body
                   .container-fluid
                     .row
+                     .col-sm-2
+                             a.navigationButton#pg2LeftButton(href="#")
+                                span.glyphicon.glyphicon-arrow-left(style='margin-top:380px;margin-left:80px')
                      .col-sm-7
                           .row#itemtitle
                           label(for='item_title') 
@@ -141,9 +163,16 @@ block content
                               a(href='#',style='font-weight:bold') Tickets
                             li
                               a(href='#',style='font-weight:bold') Ride Share
+                     .col-sm-2
+                             a.navigationButton#pg2RightButton(href="#")
+                                span.glyphicon.glyphicon-arrow-right(style='margin-top:380px;margin-left:80px')
               #menu2.tab-pane.fade
-                br
-                input.btn.btn-default(style='width:20%',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
+                .row
+                 .col-sm-2
+                    a.navigationButton#pg3LeftButton(href="#")
+                        span.glyphicon.glyphicon-arrow-left(style='margin-top:380px;margin-left:80px')
+                 .col-sm-8
+                    input.btn.btn-default(style='width:200px',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
 
     script(type='text/javascript').
        $("#drop1 li").click(function(e){
@@ -159,6 +188,16 @@ block content
         });
        var addImage= function (){
            var rand_id =Math.random().toString().substr(2);
+           var img_wrap = $('<div />', {
+              class: "img-wrap",
+              id: 'image_wrap' + rand_id,
+              style: 'float:left'
+           });
+           var close = $('<span />', {
+              class: 'glyphicon glyphicon-remove close',
+              style: 'color: red;margin-left:0px;margin-right:5px',
+              id: 'close' + rand_id,
+           });
            var img = $('<img />', { 
               id: 'image' + rand_id,
               src: $imageCropper.cropit('export', {type: 'image/jpeg',quality: .9,originalSize: true}),
@@ -167,9 +206,11 @@ block content
               onmouseout: 'unhover(this)',
               height: '200',
               width: '200',
-              style: 'height:80px;width:100px;margin-right:5px;margin-bottom:5px;'
+              style: 'height:80px;width:100px;margin-right:5px;margin-bottom:5px;float:left'
             });
-            img.appendTo('#uploadedImages');
+            img_wrap.append(close);
+            img_wrap.append(img);
+            img_wrap.appendTo('#uploadedImages');
             var imageBase = $('<input/>',{
                 id: 'imagebase' + rand_id,
                 type: 'hidden',
@@ -181,4 +222,28 @@ block content
             $('input.cropit-image-input').val('');
             $('.cropit-preview-background').removeAttr('src');
             $('.cropit-preview-image').removeAttr('src');
+            close.on('click', function() {
+                var the_id = this.id;
+                console.log(the_id);
+                the_id = the_id.substring(5);
+                $("#imagebase" + the_id).remove();
+                $("#image" + the_id).remove();
+                $(this).remove();
+            });
        };
+       
+        //Verify if we have at least 1 image uploaded
+        function verifyImages(event){
+            if ($("[id^=imagebase]").length == 0){
+                alert("Please upload an image.");
+            }
+            else{
+                $('.nav-tabs a:eq(' + event.data + ')').tab('show'); 
+                //$('.nav-tabs first-child a').tab('show'); 
+            }
+        }
+        
+        $("#pg1RightButton").on('click', 1, verifyImages);
+        $("#pg2LeftButton").on('click', 0, verifyImages);
+        $("#pg2RightButton").on('click', 2, verifyImages);
+        $("#pg3LeftButton").on('click', 1, verifyImages);

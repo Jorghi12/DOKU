@@ -112,7 +112,7 @@ passport.use(new FacebookStrategy({
           user.profile.location = (profile._json.location) ? profile._json.location.name : '';
           user.save((err) => {
 			// Add Extended fields to the user.
-			createExtendedFields(user, function() { 
+			createExtendedFields(user, function() {
 				done(err, user);
 			});
           });
