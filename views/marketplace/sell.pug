@@ -115,10 +115,10 @@ block content
                  .panel-body
                   .container-fluid
                     .row
-                     .col-sm-2
+                     .col-sm-1
                              a.navigationButton#pg2LeftButton(href="#")
                                 span.glyphicon.glyphicon-arrow-left(style='margin-top:380px;margin-left:80px')
-                     .col-sm-7
+                     .col-sm-4
                           .row#itemtitle
                           label(for='item_title') 
                             span.listingfont Item Title:
@@ -134,8 +134,8 @@ block content
                               .input-group
                                span.input-group-addon $
                                span.input-group-addon 0.00
-                               input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)',style="resize:none;width:20%")
-
+                               input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)',style="resize:none;")
+                     .col-sm-3
                           .row#itemcategory
                           label(for='item_price') 
                             span.listingfont Category:
@@ -144,7 +144,7 @@ block content
                             input.span#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="Select Category") 
                             span.glyphicon.glyphicon-chevron-down
 
-                          ul.dropdown-menu#drop1(style='margin-left:16px;width:215px')
+                          ul.dropdown-menu#drop1(style='margin-left:16px;width:212px')
                             li
                               a(href='#',style='font-weight:bold') All Categories
                             li
@@ -163,7 +163,7 @@ block content
                               a(href='#',style='font-weight:bold') Tickets
                             li
                               a(href='#',style='font-weight:bold') Ride Share
-                     .col-sm-2
+                     .col-sm-1
                              a.navigationButton#pg2RightButton(href="#")
                                 span.glyphicon.glyphicon-arrow-right(style='margin-top:380px;margin-left:80px')
               #menu2.tab-pane.fade
