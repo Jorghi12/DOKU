@@ -68,9 +68,9 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.engine('pug', engines.pug);
-app.engine('jsx', engines.react);
+//app.engine('jsx', engines.react);
 var options = { beautify: true };
-app.engine('jsx', require('express-react-views').createEngine(options));
+//app.engine('jsx', require('express-react-views').createEngine(options));
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
