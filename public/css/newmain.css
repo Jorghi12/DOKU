@@ -254,3 +254,16 @@ input[type="file"] {
 	margin-top: 40px;
 	margin-bottom: 20px;
 }
+
+.glyphicon.glyphicon-chevron-right {
+    font-size: 30px;
+}
+
+.glyphicon.glyphicon-chevron-left {
+    font-size: 30px;
+}
+
+a.navigationButton {
+    font-size: 0px;
+}
+

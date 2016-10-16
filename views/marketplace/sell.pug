@@ -16,14 +16,12 @@ block content
      color: yellow
      }
      .navigationButton {
-      color:blue;
+      color:black;
       background:white;
-      font-size:100px;
      }
      .navigationButton:hover  {
-      color:green;
+      color:#df7c5c;
       background:white;
-      font-size:100px;
      }
     script(type='text/javascript').
      function hover(element) {
@@ -93,31 +91,32 @@ block content
                 .container-fluid
                   .row
                     .panel-body 
-                        .row
-                         .col-sm-3#uploadedImages
-                         
-                         .col-sm-6#imagecontainer
-                            #image-cropper(style='width:400px;cursor: pointer;')
-                                .cropit-preview(style='width:500px;height:400px')
-                                input.cropit-image-zoom-input(type='range')
-                                .row#selectimagebuttons
-                                  label.custom-file-upload
-                                    input.cropit-image-input(type='file',accept="image/*" capture="camera")
-                                    .span#selectimagetext SELECT FILE                                
-                                  button.btn.btn-primary#addimage(type='button',onclick='addImage()') 
-                                    .span#addimagetext ADD IMAGE
-                                  span.rotate-cw.glyphicon.glyphicon-repeat(style="float:right")
-                         .col-sm-2
-                             a.navigationButton#pg1RightButton(href="#")
-                                span.glyphicon.glyphicon-arrow-right(style='margin-top:380px;margin-left:80px')
+                      .row
+                       .col-sm-3#uploadedImages
+                       
+                       .col-sm-6#imagecontainer
+                          #image-cropper(style='width:400px;cursor: pointer;')
+                              .cropit-preview(style='width:500px;height:400px')
+                              input.cropit-image-zoom-input(type='range')
+                              .row#selectimagebuttons
+                                label.custom-file-upload
+                                  input.cropit-image-input(type='file',accept="image/*" capture="camera")
+                                  .span#selectimagetext SELECT FILE                                
+                                button.btn.btn-primary#addimage(type='button',onclick='addImage()') 
+                                  .span#addimagetext ADD IMAGE
+                                span.rotate-cw.glyphicon.glyphicon-repeat(style="float:right")
+                      .row
+                        .col-sm-11
+                        .col-sm-1
+                          a.navigationButton#pg1RightButton(href="#")
+                            span.glyphicon.glyphicon-chevron-right
+
 
               #menu1.tab-pane.fade 
                  .panel-body
                   .container-fluid
                     .row
                      .col-sm-1
-                             a.navigationButton#pg2LeftButton(href="#")
-                                span.glyphicon.glyphicon-arrow-left(style='margin-top:380px;margin-left:80px')
                      .col-sm-4
                           .row#itemtitle
                           label(for='item_title') 
@@ -165,16 +164,24 @@ block content
                               a(href='#',style='font-weight:bold') Ride Share
                             li
                               a(href='#',style='font-weight:bold') Others
-                     .col-sm-1
-                             a.navigationButton#pg2RightButton(href="#")
-                                span.glyphicon.glyphicon-arrow-right(style='margin-top:380px;margin-left:80px')
+                    .row(style='margin-top: 200px;')
+                      .col-sm-1
+                        a.navigationButton#pg2LeftButton(href="#")
+                          span.glyphicon.glyphicon-chevron-left
+                      .col-sm-10
+                      .col-sm-1
+                        a.navigationButton#pg2RightButton(href="#")
+                          span.glyphicon.glyphicon-chevron-right
+
               #menu2.tab-pane.fade
                 .row
                  .col-sm-2
-                    a.navigationButton#pg3LeftButton(href="#")
-                        span.glyphicon.glyphicon-arrow-left(style='margin-top:380px;margin-left:80px')
                  .col-sm-8
                     input.btn.btn-default(style='width:200px',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
+                .row(style='margin-top: 200px;')
+                  .col-sm-1
+                    a.navigationButton#pg3LeftButton(href="#")
+                      span.glyphicon.glyphicon-chevron-left
 
     script(type='text/javascript').
        $("#drop1 li").click(function(e){
