@@ -48,8 +48,12 @@ block content
       document.getElementById("category_choice").value = $(this).text()
      });
 
-    .row
+    -var index = 4
         each item in items
+          if (index % 4 ==0)
+             .row
+             <br>
+          -index++
             .col-sm-3
                - var itemColor = item.isMyItem ? 'wheat' : 'lightblue'
                a(href='/marketplace/fullView/' + item.itemId, style="color: inherit;text-decoration: none;cursor:pointer;")
