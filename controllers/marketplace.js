@@ -638,7 +638,7 @@ exports.searchCatalog = (req, res) => {
   console.log(req.body.selectedCategory);
   var category = req.body.selectedCategory == "All Categories" ? ".*" : req.body.selectedCategory;
   console.log(category);
-  Item.find().or(
+  Item.find().sort('-date').or(
     [
 		{"title": { "$regex": req.body.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}},
 		{"description": { "$regex": req.body.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}}
@@ -685,7 +685,7 @@ exports.searchCatalog = (req, res) => {
  * List of Catalog items.
  */
 exports.getCatalog = (req, res) => {
-  Item.find({}, function(err, items) {
+  Item.find({}).sort('-date').exec(function(err, items) {
     var itemMap = [];
 
     items.forEach(function(item) {
