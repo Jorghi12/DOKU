@@ -113,9 +113,9 @@ block content
                   .row
                     .panel-body 
                       .row
-                       .col-sm-3#uploadedImages
+                       .col-xs-3.col-md-3#uploadedImages
                        
-                       .col-sm-6#imagecontainer
+                       .col-xs-6.col-md-6#imagecontainer
                           #image-cropper(style='width:400px;cursor: pointer;')
                               .cropit-preview(style='width:500px;height:400px')
                               input.cropit-image-zoom-input(type='range')
@@ -127,8 +127,8 @@ block content
                                   .span#addimagetext ADD IMAGE
                                 span.rotate-cw.glyphicon.glyphicon-repeat(style="float:right")
                       .row
-                        .col-sm-11
-                        .col-sm-1
+                        .col-xs-11.col-md-11
+                        .col-xs-1.col-md-1
                           a.navigationButton#pg1RightButton(href="#", style='font-size:30px')
                             span.glyphicon.glyphicon-chevron-right
 
@@ -137,8 +137,8 @@ block content
                  .panel-body
                   .container-fluid
                     .row
-                     .col-sm-1
-                     .col-sm-4
+                     .col-xs-1.col-md-1
+                     .col-xs-4.col-md-4
                           .row#itemtitle
                           label(for='item_title') 
                             span.listingfont Title:
@@ -153,7 +153,7 @@ block content
                             span.listingfont Price:
                               .input-group
                                input.formButtons.form-control(type='text', name='price',aria-label='Amount (to the nearest dollar)',style="width:355px;height:40px;font-size:30px",placeholder='10.00')
-                     .col-sm-3
+                     .col-xs-3.col-md-3
                           .row#itemcategory
                           label(for='item_price') 
                             span.listingfont Category:
@@ -184,22 +184,22 @@ block content
                             li
                               a(href='#',style='font-weight:bold') Others
                     .row(style='margin-top: 200px;')
-                      .col-sm-1
+                      .col-xs-1.col-md-1
                         a.navigationButton#pg2LeftButton(href="#", style='font-size:30px')
                           span.glyphicon.glyphicon-chevron-left
-                      .col-sm-10
-                      .col-sm-1
+                      .col-xs-10.col-md-10
+                      .col-xs-1.col-md-1
                         a.navigationButton#pg2RightButton(href="#", style='font-size:30px')
                           span.glyphicon.glyphicon-chevron-right
 
               #menu2.tab-pane.fade
                 .row
-                 .col-sm-2
-                 .col-sm-8
+                 .col-xs-2.col-md-2
+                 .col-xs-8.col-md-8
                     input.btn.btn-default(style='width:100%;height:60px;font-size:35px;font-weight:bold',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
-                 .col-sm-2
+                 .col-xs-2.col-md-2
                 .row(style='margin-top: 200px;')
-                  .col-sm-1
+                  .col-xs-1.col-md-1
                     a.navigationButton#pg3LeftButton(href="#", style='font-size:30px')
                       span.glyphicon.glyphicon-chevron-left
 

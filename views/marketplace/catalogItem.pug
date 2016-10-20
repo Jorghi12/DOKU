@@ -18,15 +18,15 @@ block content
          }
 
        .row
-        .col-sm-1
+        .col-xs-1.col-md-1
          each image in item.image
           .row
            img#sideImage(onclick="updateImage(this)", onmouseover="hover(this);", onmouseout="unhover(this)", src=image, height=200, style='height:80px;width:100px;')
            <br>
-        .col-sm-6
+        .col-xs-6.col-md-6
          img#mainProductImage(src=item.image[0], height=200, style='height:400px;width:500px;')
          p
-        .col-sm-4
+        .col-xs-4.col-md-4
          div(style='overflow:hidden;')
           .form-group
            .row
