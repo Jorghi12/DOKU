@@ -2,11 +2,11 @@ extends ../layout
 
 block content
 
-    .row(style='margin: 0 auto;float:none')#searchbar
-      h2.title Buy. Sell. Cornell.
+    .row#searchbar
+      h2(style='margin: 0 auto;float:none').title Buy. Sell. Cornell.
       br
-      form.navbar-form(action='/marketplace/search', method='post')
-          .form-group(style='display:inline;')
+      form.navbar-form(style='margin: 0 auto;float:none',action='/marketplace/search', method='post')
+          .form-group(style='display:inline;margin: 0 auto;float:none')
             .input-group
               .input-group-btn
                 button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
@@ -56,7 +56,8 @@ block content
              .row
              <br>
           -index++
-            .col-xs-16.col-md-3
+            .col-xs-8
+            .col-xs-8.col-md-3
                - var itemColor = item.isMyItem ? 'wheat' : 'lightblue'
                a(href='/marketplace/fullView/' + item.itemId, style="color: inherit;text-decoration: none;cursor:pointer;")
                     img(src=item.image[0], style='height:200px;width:250px;margin-top:5px')
@@ -68,3 +69,4 @@ block content
                      | <small style='width:100%;letter-spacing:0.065rem;font-family:Montserrat,sans-serif'>#{item.description}</small>
                      | <br>
                      | <span style='font-weight:bold;font-size:16px;font-family:Monsterrat, sans-serif;'>$#{item.price}<span>
+            .col-xs-8
