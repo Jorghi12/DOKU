@@ -27,10 +27,10 @@ block content
         p
          .row
              each item in items
-                 .col-xs-4.col-md-4
-                     .panel.panel-default(style="border:1px solid gold")
+                 .col-sm-4
+                     .panel.panel-default(style="")
                        .panel-body
-                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
+                         img(class="img-responsive center-block",id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
                          p
                          a.btn.btn-primary(style='width:50%',href='/transactions/remove/' + item.itemId,data-transition='fade', data-theme='c')
                           |Remove from listings
@@ -55,10 +55,10 @@ block content
         p
          .row
              each item in purchasedItems
-                 .col-xs-4.col-md-4
-                     .panel.panel-default(style='height:270px;width:370px;border:1px solid orange')
+                 .col-sm-4
+                     .panel.panel-default(style='height:270px;width:370px;')
                        .panel-body
-                         img(id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
+                         img(class="img-responsive center-block",id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
                          p
                          if item.waitingOnDeposit
                            - var buttonText = "Waiting on Payment"
@@ -100,9 +100,9 @@ block content
              h4.modal-title Update Item
            .modal-body(id="modalBodyId", style='width:800px;')
              .row
-               .col-xs-4.col-md-4
+               .col-sm-4
                  img(id='modalImage', height=200, style='height:262px;width:337px;')
-               .col-xs-3.col-md-3(style='margin-left:30px')
+               .col-sm-3(style='margin-left:30px')
                     label(for='modalTitle') Title
                         textarea#modalTitle.form-control(name='itemTitle',rows='1',style="resize:none;width:130%")
                     p
@@ -114,7 +114,7 @@ block content
                          span.input-group-addon $
                          span.input-group-addon 0.00
                          input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:134%")
-               .col-xs-3.col-md-3(style='margin-left:40px')
+               .col-sm-3(style='margin-left:40px')
                     button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
                       input.span#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="All Categories") 
                       span.glyphicon.glyphicon-chevron-down
