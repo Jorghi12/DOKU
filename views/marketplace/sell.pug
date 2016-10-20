@@ -2,6 +2,27 @@ extends ../layout
 
 block content
     style.
+     .formButtons {
+      -webkit-border-radius: 4px !important; 
+      -moz-border-radius: 4px !important; 
+      border-radius: 4px !important;
+     }
+
+     .noselect {
+       -webkit-touch-callout: none; /* iOS Safari */
+       -webkit-user-select: none;   /* Chrome/Safari/Opera */
+       -khtml-user-select: none;    /* Konqueror */
+       -moz-user-select: none;      /* Firefox */
+       -ms-user-select: none;       /* Internet Explorer/Edge */
+       user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+      }
+      
+     .noselect {
+       outline: none;
+       box-shadow: none;
+      }
+
      .img-wrap {
      position: relative;
      display: inline-block;
@@ -120,30 +141,28 @@ block content
                      .col-sm-4
                           .row#itemtitle
                           label(for='item_title') 
-                            span.listingfont Item Title:
-                              input.form-control(type='text', name='itemTitle',style='width:157%')
+                            span.listingfont Title:
+                              input.formButtons.form-control(type='text', name='itemTitle',style="width:355px",placeholder='Flatscreen TV')
                           .row#itemdescription
                           label(for='item_desc') 
                             span.listingfont Description:
-                              textarea#item_desc.form-control(name='description',rows='5',style="resize:none;width:170%")
+                              textarea#item_desc.formButtons.form-control(name='description',rows='5',style="resize:none;width:355px",placeholder='A Samsung flatscreen Television. In great condition.')
                           
                           .row#itemprice
                           label(for='item_price') 
                             span.listingfont Price:
                               .input-group
-                               span.input-group-addon $
-                               span.input-group-addon 0.00
-                               input.form-control(type='text', name='price', aria-label='Amount (to the nearest dollar)',style="resize:none;")
+                               input.formButtons.form-control(type='text', name='price',aria-label='Amount (to the nearest dollar)',style="width:355px;height:40px;font-size:30px",placeholder='10.00')
                      .col-sm-3
                           .row#itemcategory
                           label(for='item_price') 
                             span.listingfont Category:
                           br
-                          button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px;margin-top:-5px', type='button', data-toggle='dropdown')
-                            input.span#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="Select Category") 
+                          button.btn.btn-default.formButtons.dropdown-toggle(style='font-weight:bold;height:34px;margin-top:-5px', type='button', data-toggle='dropdown')
+                            input.span.noselect#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="Select Category") 
                             span.glyphicon.glyphicon-chevron-down
 
-                          ul.dropdown-menu#drop1(style='margin-left:16px;width:212px')
+                          ul.dropdown-menu.formButtons#drop1(style='margin-left:16px;width:212px')
                             li
                               a(href='#',style='font-weight:bold') All Categories
                             li
@@ -177,7 +196,8 @@ block content
                 .row
                  .col-sm-2
                  .col-sm-8
-                    input.btn.btn-default(style='width:200px',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
+                    input.btn.btn-default(style='width:100%;height:60px;font-size:35px;font-weight:bold',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
+                 .col-sm-2
                 .row(style='margin-top: 200px;')
                   .col-sm-1
                     a.navigationButton#pg3LeftButton(href="#", style='font-size:30px')
