@@ -2,11 +2,11 @@ extends ../layout
 
 block content
 
-    .row#searchbar
+    .row#searchbar(style='margin: auto;')
       h2.title Buy. Sell. Cornell.
       br
-      form.navbar-form(action='/marketplace/search', method='post')
-          .form-group(style='display:inline;')#searchbar
+      form.navbar-form(action='/marketplace/search', method='post', style='margin: auto;')
+          .form-group(style='display:inline;')
             .input-group
              .row
               input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='border-radius:5px;width:283px;font-size:20px;font-family:Arial')
