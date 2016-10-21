@@ -50,16 +50,16 @@ block content
       document.getElementById("category_choice").value = $(this).text()
      });
 
-    -var index = 4
+    -var index = 3
         each item in items
-          if (index % 4 ==0)
+          if (index % 3 ==0)
              .row
              <br>
           -index++
-            .col-xs-6.col-md-3
+            .col-xs-6.col-md-4
                - var itemColor = item.isMyItem ? 'wheat' : 'lightblue'
                a(href='/marketplace/fullView/' + item.itemId, style="color: inherit;text-decoration: none;cursor:pointer;")
-                    img(src=item.image[0], style='height:200px;width:250px;margin-top:5px')
+                    img(src=item.image[0], style='height:280px;width:350px;margin-top:5px')
                     h6(style='font-size:1.05rem;letter-spacing:0.065rem;font-family:Montserrat,sans-serif;font-weight:300')
                      | #{item.timestamp}                  
                     <hr style='margin-bottom:7px;margin-top:7px'>
