@@ -59,7 +59,7 @@ block content
             .col-md-4
                - var itemColor = item.isMyItem ? 'wheat' : 'lightblue'
                a(href='/marketplace/fullView/' + item.itemId, style="color: inherit;text-decoration: none;cursor:pointer;")
-                    img(src=item.image[0], style='height:280px;width:350px;margin-top:5px')
+                    img(src=item.image[0], style='height:280px;width:100%;margin-top:5px')
                     h6(style='font-size:1.05rem;letter-spacing:0.065rem;font-family:Montserrat,sans-serif;font-weight:300')
                      | #{item.timestamp}                  
                     <hr style='margin-bottom:7px;margin-top:7px'>
