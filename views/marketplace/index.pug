@@ -8,6 +8,8 @@ block content
       form.navbar-form(action='/marketplace/search', method='post')
           .form-group(style='display:inline;')
             .input-group
+              input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='width:280px;font-size:20px;font-family:Arial')
+
               .input-group-btn
                 button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
                   input.span#category_choice(style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value="All Categories") 
@@ -33,8 +35,6 @@ block content
                     a.dropdown(href='#',style='font-weight:bold') Ride Share
                   li
                     a.dropdown(href='#',style='font-weight:bold') Others
-              input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='width:300px;font-size:20px;font-family:Arial')
-
             button.btn.btn-default(style='height:34px')
                 span.glyphicon.glyphicon-search
 
