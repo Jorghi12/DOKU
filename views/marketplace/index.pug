@@ -8,12 +8,15 @@ block content
       form.navbar-form(action='/marketplace/search', method='post')
           .form-group(style='display:inline;')
             .input-group
-              input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='width:280px;font-size:20px;font-family:Arial')
-
+             .row
+              input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='border-radius:5px;width:280px;font-size:20px;font-family:Arial')
+             .row
               .input-group-btn
-                button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
-                  input.span#category_choice(style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value="All Categories") 
+                button.btn.btn-default.dropdown-toggle(style='border-radius:5px;font-weight:bold;height:34px', type='button', data-toggle='dropdown')
+                  input.span#category_choice(style='border-radius:5px;width:203px;background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value="All Categories") 
                   span.glyphicon.glyphicon-chevron-down
+                  button.btn.btn-default(style='border-radius:5px;height:34px')
+                   span.glyphicon.glyphicon-search
                 ul.dropdown-menu.pull-left#drop1
                   li
                     a.dropdown(href='#',style='font-weight:bold') All Categories
@@ -35,8 +38,6 @@ block content
                     a.dropdown(href='#',style='font-weight:bold') Ride Share
                   li
                     a.dropdown(href='#',style='font-weight:bold') Others
-            button.btn.btn-default(style='height:34px')
-                span.glyphicon.glyphicon-search
 
     p
     .row
