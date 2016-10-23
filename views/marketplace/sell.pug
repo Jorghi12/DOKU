@@ -146,13 +146,13 @@ block content
                           .row#itemdescription
                           label(for='item_desc') 
                             span.listingfont Description:
-                              textarea#item_desc.formButtons.form-control(name='description',rows='5',style="resize:none;width:355px",placeholder='A Samsung flatscreen Television. In great condition.')
+                              textarea#item_desc.formButtons.form-control(name='description',rows='5',style="resize:none;width:355px",placeholder='A Samsung flatscreen Television. In great condition. With a refresh rate of 120CMR, an LED Backlight, & built in Wi-Fi. Dimensions of 44.4" x 25.8" x 2.5".')
                           
                           .row#itemprice
                           label(for='item_price') 
                             span.listingfont Price:
                               .input-group
-                               input.formButtons.form-control(type='text', name='price',aria-label='Amount (to the nearest dollar)',style="width:355px;height:40px;font-size:30px",placeholder='10.00')
+                               input.formButtons.form-control(type='text', name='price',aria-label='Amount (to the nearest dollar)',style="width:355px;height:40px;font-size:16px",placeholder='10.00')
                      .col-xs-3.col-md-3
                           .row#itemcategory
                           label(for='item_price') 
@@ -160,7 +160,7 @@ block content
                           br
                           button.btn.btn-default.formButtons.dropdown-toggle(style='font-weight:bold;height:34px;margin-top:-5px', type='button', data-toggle='dropdown')
                             input.span.noselect#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="Select Category") 
-                            span.glyphicon.glyphicon-chevron-down
+                            span.glyphicon.glyphicon-chevron-down(style='margin-top:5px')
 
                           ul.dropdown-menu.formButtons#drop1(style='margin-left:16px;width:212px')
                             li
@@ -183,20 +183,24 @@ block content
                               a(href='#',style='font-weight:bold') Ride Share
                             li
                               a(href='#',style='font-weight:bold') Others
+                          input.btn.btn-primary(style='border-radius:5px;width:100%;height:60px;font-size:35px;font-weight:bold',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
+                    .row
+                     <br>
+                     .col-xs-1.col-md-1
+                     .col-xs-4.col-md-4
                     .row(style='margin-top: 200px;')
                       .col-xs-1.col-md-1
                         a.navigationButton#pg2LeftButton(href="#", style='font-size:30px')
                           span.glyphicon.glyphicon-chevron-left
                       .col-xs-10.col-md-10
                       .col-xs-1.col-md-1
-                        a.navigationButton#pg2RightButton(href="#", style='font-size:30px')
+                        a.navigationButton#pg2RightButton(href="#", style='font-size:30px;visibility:hidden')
                           span.glyphicon.glyphicon-chevron-right
 
               #menu2.tab-pane.fade
                 .row
                  .col-xs-2.col-md-2
                  .col-xs-8.col-md-8
-                    input.btn.btn-default(style='width:100%;height:60px;font-size:35px;font-weight:bold',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
                  .col-xs-2.col-md-2
                 .row(style='margin-top: 200px;')
                   .col-xs-1.col-md-1

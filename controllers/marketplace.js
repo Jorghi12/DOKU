@@ -674,6 +674,8 @@ exports.searchCatalog = (req, res) => {
 
 		res.render('marketplace/index', {
 		  title: 'MarketPlace',
+		  category: req.body.selectedCategory,
+		  search_text: req.body.searchQuery,
 		  items: itemMap
 		});
   });
@@ -718,6 +720,8 @@ exports.getCatalog = (req, res) => {
 
     res.render('marketplace/index', {
       title: 'MarketPlace',
+	  category: "All Categories",
+	  search_text: "",
 	  items: itemMap
     });
   });

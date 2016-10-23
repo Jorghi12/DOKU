@@ -10,13 +10,13 @@ block content
           .form-group(style='display:inline;')
             .input-group
              .row
-              input.form-control(name='searchQuery', type='text', placeholder='What are you searching for?', style='border-radius:5px;width:283px;font-size:20px;font-family:Arial')
+              input.form-control(value=search_text,name='searchQuery', type='text', placeholder='What are you searching for?', style='border-radius:5px;width:283px;font-size:20px;font-family:Arial')
              .row
               .input-group-btn
                 button.btn.btn-default.dropdown-toggle(style='border-radius:5px;font-weight:bold;height:34px', type='button', data-toggle='dropdown')
-                  input.span#category_choice(style='border-radius:5px;width:203px;background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value="All Categories") 
+                  input.span#category_choice(style='border-radius:5px;width:203px;background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value=category) 
                   span.glyphicon.glyphicon-chevron-down
-                  button.btn.btn-default(style='margin-left:1px;border-radius:5px;height:34px')
+                  button.btn.btn-default#run_search_query(style='margin-left:1px;border-radius:5px;height:34px')
                    span.glyphicon.glyphicon-search
                 ul.dropdown-menu.pull-left#drop1(style='width:241px')
                   li
@@ -49,7 +49,8 @@ block content
 
     script(text='text/javascript').
      $("#drop1 li").click(function(e){
-      document.getElementById("category_choice").value = $(this).text()
+      document.getElementById("category_choice").value = $(this).text();
+      $("#run_search_query").click();
      });
 
     -var index = 3
