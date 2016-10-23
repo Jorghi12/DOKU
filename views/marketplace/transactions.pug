@@ -20,7 +20,7 @@ block content
       li
         a(data-toggle='tab', href='#menu1') Currently Buying
       li
-        a(data-toggle='tab', href='#menu2') Transaction History
+        a(data-toggle='tab', href='#menu2' style='visibility:hidden') Transaction History
     .tab-content
       #home.tab-pane.fade.in.active
         h3 <b>My Items For Sale:</b>
@@ -48,7 +48,7 @@ block content
                              - var buttonType = 'btn btn-warning'
                          - var buttonLink = item.readyForSchedule ? '/transactions/schedulepickup/' + item.itemId : '#'
                          
-                           a(class=buttonType,style='width:100%;margin-top:3px',href=buttonLink,data-transition='fade', data-theme='c')
+                           a(class=buttonType,style='width: 100%;margin-top:3px',href=buttonLink,data-transition='fade', data-theme='c')
                             |#{buttonText}
       #menu1.tab-pane.fade
         h3 <b>Items I'm currently buying:</b>
@@ -57,7 +57,7 @@ block content
              each item in purchasedItems
                  .col-sm-4
                      .panel.panel-default(style='height:270px;width:370px;')
-                       .panel-body
+                       .panel-body#currentlybuying
                          img(class="img-responsive center-block",id=item.itemId,src=item.image[0], height=200, style='height:200px;width:250px;')
                          p
                          if item.waitingOnDeposit
@@ -75,8 +75,7 @@ block content
                                - var buttonLink = '#'
                          a(class=buttonType,href=buttonLink,data-transition='fade', data-theme='c')
                           | #{buttonText}
-                         a.btn.btn-success(href="#")
-                          |Ask a Question
+
       #menu2.tab-pane.fade
         h3 <b>My Transaction History:</b>
         .container
@@ -93,12 +92,12 @@ block content
                 td $3000.00
     form(action='/transactions/update', method='post')
      #myModal.modal.fade(role='dialog', data-backdrop='true')
-      .modal-dialog(style='width:800px;')
+      .modal-dialog(style='width:1000px;')
          .modal-content
            .modal-header
              button.close(type='button', data-dismiss='modal') ×
              h4.modal-title Update Item
-           .modal-body(id="modalBodyId", style='width:800px;')
+           .modal-body(id="modalBodyId", style='width:1000px;')
              .row
                .col-sm-4
                  img(id='modalImage', height=200, style='height:262px;width:337px;')
@@ -112,9 +111,9 @@ block content
                     label(for='modalPrice') Price
                         .input-group
                          span.input-group-addon $
-                         span.input-group-addon 0.00
-                         input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:134%")
+                         input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:130%")
                .col-sm-3(style='margin-left:40px')
+                label(for='modalCat') Category
                     button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
                       input.span#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="All Categories") 
                       span.glyphicon.glyphicon-chevron-down

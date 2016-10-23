@@ -4,13 +4,13 @@ block content
 
     .row#searchbar
       h2.title Buy. Sell. Cornell.
-      br
+      
       form.navbar-form(action='/marketplace/search', method='post')
-        .row
+        .row.mainsearch
           .form-group(style='display:inline;')
             .input-group
               .input-group-btn
-                button.btn.btn-default.dropdown-toggle(style='border-radius:5px;font-weight:bold;height:34px', type='button', data-toggle='dropdown')
+                button.btn.btn-default.dropdown-toggle#searchdropdown(style='border-radius:5px;font-weight:bold;height:34px', type='button', data-toggle='dropdown')
                   input.span#category_choice(style='border-radius:5px;width:203px;background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value=category) 
                   span.glyphicon.glyphicon-chevron-down
                 ul.dropdown-menu.pull-left#drop1(style='width:241px')
@@ -34,15 +34,55 @@ block content
                     a.dropdown(href='#',style='font-weight:bold') Ride Share
                   li
                     a.dropdown(href='#',style='font-weight:bold') Others
-              input.form-control(value=search_text,name='searchQuery', type='text', placeholder='What are you searching for?', style='border-radius:5px;width:283px;font-size:20px;font-family:Arial')
+              input#searchbartext.form-control(value=search_text,name='searchQuery', type='text', placeholder='What are you searching for?', style='border-radius:5px;width:283px;font-size:20px;font-family:Arial')
               button.btn.btn-default#run_search_query(style='border-radius:5px;height:34px')
                    span.glyphicon.glyphicon-search
+
+    .container-fluid.mobilesearch
+      .col-md-4.col-md-offset-4
+       form.navbar-form(action='/marketplace/search', method='post', style='margin: auto;')
+          .form-group(style='display:inline;')
+            .input-group
+             .row
+              input.form-control(value=search_text,name='searchQuery', type='text', placeholder='What are you searching for?', style='border-radius:5px;width:283px;font-size:20px;font-family:Arial')
+             .row
+              .input-group-btn
+                button.btn.btn-default.dropdown-toggle(style='border-radius:5px;font-weight:bold;height:34px', type='button', data-toggle='dropdown')
+                  input.span#category_choice(style='border-radius:5px;width:203px;background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none; font-family:Montserrat,sans-serif;',name="selectedCategory", value=category) 
+                  span.glyphicon.glyphicon-chevron-down
+                  button.btn.btn-default#run_search_query(style='margin-left:1px;border-radius:5px;height:34px')
+                   span.glyphicon.glyphicon-search
+                ul.dropdown-menu.pull-left#drop1(style='width:241px')
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') All Categories
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Books
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Sublets
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Technology & Gadgets
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Men's Apparel
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Women's Apparel
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Furniture & Home
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Tickets
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Ride Share
+                  li
+                    a.dropdown(href='#',style='font-weight:bold') Others
              
 
     p
-    .row
-      .subtitletext
-        span.subtitle alternatively, browse through the latest offerings :
+    .row.subtitletext
+        span.subtitle alternatively, browse through our top categories:
+    .row.categorytext
+        a.category(href='#',onclick='gains("For Her")') For Her
+        a.category(href='#', onclick='gains("For Him")') For Him
+        a.category(href='#', onclick='gains("Technology & Gadgets")') Technology & Gadgets
+        a.category(href='#', onclick='gains("Furniture & Home")') Furniture & Home
     hr#lineborder
     br
 
@@ -51,6 +91,12 @@ block content
       document.getElementById("category_choice").value = $(this).text();
       $("#run_search_query").click();
      });
+
+     function gains(category){
+
+      document.getElementById("category_choice").value = category;
+      $("#run_search_query").click();      
+     }
 
     -var index = 3
         each item in items

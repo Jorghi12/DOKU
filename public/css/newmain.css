@@ -1,8 +1,32 @@
+@media only screen and (max-width: 767px) {
+    .mainsearch {
+        display: none;
+    }
+
+    div#searchbar.row {
+        padding-top: 0px;
+    }
+}
+
+@media only screen and (min-width: 767px) {
+    .mobilesearch {
+        display: none;
+    }
+
+}
+
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
+
 input[type=range] {
     /*removes default webkit styles*/
     -webkit-appearance: none;
     
-    /*fix for FF unable to apply focus style bug */
+    /*fix for FF unable to apply focus style bug */ 
     border: 1px solid white;
     
     /*required for proper track sizing in FF*/
@@ -138,6 +162,18 @@ span.headertab {
 	font-size:18px;
 }
 
+.category {
+    font-family: "Montserrat", sans-serif;
+    font-size:18px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.categorytext {
+    text-align: center;
+    margin-top: 10px;
+}
+
 #sideImage {
 	margin-bottom: 10px;
 }
@@ -267,3 +303,19 @@ a.navigationButton {
     font-size: 0px;
 }
 
+#sellitemdescription{
+    text-align: center;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+#submitlisting {
+    margin-top: 50px;
+}
+
+#currentlybuying {
+    text-align: center;
+}

@@ -4,9 +4,9 @@ block content
   .page-header
     h3 #{title} #{item.title}
   form(action='/transactions/confirmDelivery/', method='post')
-   .panel.panel-default(style='background-color: lightblue;height:455px;')
+   .panel.panel-default(style='background-color: white;height:455px;')
      .panel-body
-       input(type='hidden', name='item_id', value=item.itemId)
+       input(type='hidden', name='item_id', value=item.itemId, required)
        .row
         .col-xs-6.col-md-6
          img(id=item.itemId,src=item.image[0], height=200, style='height:423px;width:500px;')
@@ -16,19 +16,19 @@ block content
         label(for='deliveryLocation') Delivery Location:    
         <br>
          - var old_loc = item.delivery ? item.delivery.deliveryLocation : ''
-         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryLocation', value=old_loc, placeholder='Your Address')
+         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryLocation', value=old_loc, placeholder='Your Address', required)
         <br>  
         <br>
         label(for='deliveryPhoneNumber') Contact Info:  
         <br>
          - var old_loc = item.delivery ? item.delivery.deliveryPhoneNumber : ''
-         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryPhoneNumber', value=old_loc, placeholder='Your Phone Number')
+         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryPhoneNumber', value=old_loc, placeholder='Your Phone Number', required)
         <br>  
         <br>
-        label(for='deliveryVenmoAccount') Venmo Account:  
+        label(for='deliveryVenmoAccount') Venmo Username:  
         <br>
          - var old_loc = item.delivery ? item.delivery.buyerVenmo : ''
-         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryVenmoAccount', value=old_loc, placeholder='Your Venmo Account')
+         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryVenmoAccount', value=old_loc, placeholder='Your Venmo Username', required)
         <br>  
         button.btn.btn-primary(type='submit', style='width:265px')
          |Confirm Delivery

@@ -19,15 +19,16 @@ block content
           i.fa.fa-user
           | Login
         a.btn.btn-link(href='/forgot') Forgot your password?
-        a.btn.btn-link(href='/signup',style='visibility:hidden') Create.
+        a.btn.btn-link(href='/signup') Sign Up Now
     .form-group
       .col-sm-offset-3.col-xs-7.col-md-7
         hr
     .form-group
       .col-sm-offset-3.col-xs-7.col-md-7
-        a.btn.btn-block.btn-facebook.btn-social(href='/auth/facebook')
-          i.fa.fa-facebook
-          | Sign in with Facebook
+        .col-xs-6
+          a.btn.btn-block.btn-facebook.btn-social(href='/auth/facebook')
+            i.fa.fa-facebook
+            | Log in with Facebook
         a.btn.btn-block.btn-twitter.btn-social(href='/auth/twitter',style='visibility:hidden')
           i.fa.fa-twitter
           | Sign in with Twitter
