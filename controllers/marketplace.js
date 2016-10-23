@@ -398,11 +398,13 @@ exports.itemFullView = (req, res) => {
 		var mapped_questions = [];
 		
 		for (var i =0;i<item.questions.length;i++){
+			var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
 			mapped_questions.push({
 				text: item.questions[i].question,
 				createdAt: item.questions[i].createdAt,
 				myQuestion: (req.user && (item.questions[i].asker == req.user._id)),
-				comments: item.questions[i].comments
+				comments: item.questions[i].comments,
+				timestamp: timestamp
 			})
 		}
 		

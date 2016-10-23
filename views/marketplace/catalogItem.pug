@@ -52,17 +52,7 @@ block content
           |ASK A QUESTION
        .row
          include ../partials/chat
-         if item.questions
-             each question in item.questions
-               if question.comment
-                .row
-                  b(style='font-weight:bold;letter-spacing:.01em;margin-top:40px;margin-left:15px') Q: #{question.text}
-                  each comment in question.comments
-                      .row
-                       b(style='font-weight:bold;letter-spacing:.01em;margin-top:40px;margin-left:15px') A: #{comment.text}
-         else
-            | There are no comments yet.
-          
+		 
        // Modal
        #myModal.modal.fade(role='dialog')
           .modal-dialog
@@ -80,4 +70,4 @@ block content
                  input(type='hidden', name='item_id', value=item.itemId)
               .modal-footer
                 button.btn.btn-default(type='button', data-dismiss='modal') Close
-                button.btn.btn-warning(type='submit') Ask Question
+                button.btn.btn-warning(onclick='modalUp("' + item.itemId + '","' + item.price + '","' + item.description + '")', type='submit') Ask Question
