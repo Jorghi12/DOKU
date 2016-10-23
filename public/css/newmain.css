@@ -20,7 +20,9 @@
     margin-right: 0px;
 }
 
-
+.navbar-collapse.in {
+    overflow-y: visible;
+}
 
 input[type=range] {
     /*removes default webkit styles*/
