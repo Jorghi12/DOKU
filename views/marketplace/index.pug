@@ -87,6 +87,7 @@ block content
     br
 
     script(text='text/javascript').
+     window.startPage = 3;
      $("#drop1 li").click(function(e){
       document.getElementById("category_choice").value = $(this).text();
       $("#run_search_query").click();
@@ -94,14 +95,21 @@ block content
 
      function gains(category){
       document.getElementById("category_choice").value = category;
-      $("#run_search_query").click();      
+      $("#run_search_query").click();
      }
      
      function loadMore(){
-        $.get("/marketplace/loadmore",{searchQuery: '', category: '', page: '0'}, function(item_contents, status){
+        $.get("/marketplace/loadmore",{searchQuery: '', category: '', page: window.startPage}, function(item_contents, status){
             $( ".row" ).last().after(item_contents);
         });
      }
+     
+     $(window).scroll(function() {
+       if($(window).scrollTop() + $(window).height() == $(document).height()) {
+           loadMore();
+           window.startPage +=1;
+       }
+     });
     .row#gainzAreHere
      -var index = 3
         each item in items
