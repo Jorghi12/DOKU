@@ -21,11 +21,10 @@ block content
         .col-xs-1.col-md-1
          each image in item.image
           .row
-           img#sideImage(onclick="updateImage(this)", onmouseover="hover(this);", onmouseout="unhover(this)", src=image, height=200, style='height:80%;width:100%;')
+           img#sideImage(onclick="updateImage(this)", onmouseover="hover(this);", onmouseout="unhover(this)", src=image, height=200, style='height:80px;width:100px;')
            <br>
         .col-xs-6.col-md-6
          img#mainProductImage(src=item.image[0], height=200, style='height:64%;width:80%;')
-         p
         .col-xs-4.col-md-5
          div(style='overflow:hidden;')
           .form-group
