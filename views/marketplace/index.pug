@@ -93,19 +93,23 @@ block content
      });
 
      function gains(category){
-
       document.getElementById("category_choice").value = category;
       $("#run_search_query").click();      
      }
-
-    -var index = 3
+     
+     function loadMore(){
+        $.get("/marketplace/loadmore",{searchQuery: '', category: '', page: '0'}, function(item_contents, status){
+            $( ".row" ).last().after(item_contents);
+        });
+     }
+    .row#gainzAreHere
+     -var index = 3
         each item in items
           if (index % 3 ==0)
-             .row
-             <br>
+           <br>
+           .row
           -index++
             .col-md-4
-               - var itemColor = item.isMyItem ? 'wheat' : 'lightblue'
                a(href='/marketplace/fullView/' + item.itemId, style="color: inherit;text-decoration: none;cursor:pointer;")
                     img(src=item.image[0], style='height:280px;width:100%;margin-top:5px')
                     h6(style='font-size:1.05rem;letter-spacing:0.065rem;font-family:Montserrat,sans-serif;font-weight:300')
@@ -116,3 +120,4 @@ block content
                      | <small style='width:100%;letter-spacing:0.065rem;font-family:Montserrat,sans-serif'>#{item.description}</small>
                      | <br>
                      | <span style='font-weight:bold;font-size:16px;font-family:Monsterrat, sans-serif;'>$#{item.price}<span>
+    .row

@@ -117,7 +117,7 @@ app.use(function(req, res, next) {
   }
   next();
 });
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: '2h' }));
 
 /**
  * Primary app routes.
@@ -149,6 +149,7 @@ app.post('/marketplace/askquestion', marketController.askQuestion)
 app.post('/marketplace/answerquestion', marketController.answerQuestion);
 app.post('/marketplace/search', marketController.searchCatalog)
 app.get('/marketplace', marketController.getCatalog);
+app.get('/marketplace/loadmore', marketController.catalogLoadMore);
 app.get('/marketplace/sell', marketController.getSell);
 app.post('/marketplace/sell', marketController.sellNewItem);
 app.get('/marketplace/fullView/:itemId', marketController.itemFullView);

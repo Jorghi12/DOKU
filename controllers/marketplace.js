@@ -735,6 +735,53 @@ exports.searchCatalog = (req, res) => {
   });
 }
 
+/**
+ * GET /marketplace/loadmore
+ * Loads more catalog items.
+ */
+exports.catalogLoadMore = (req, res) => {
+	// Category, Search Specifier, Range Requested
+	var PER_PAGE = 3;
+	console.log(req.query);
+	var PAGE = req.query.page;
+	var category = req.query.category == "All Categories" ? ".*" : req.query.category;
+	Item.find().limit(PER_PAGE).skip(PER_PAGE * PAGE).sort([['updatedAt', 'descending']]).or(
+    [
+		{"title": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}},
+		{"description": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}}
+	]).exec(
+	function(err,items) {
+		var itemMock = `<div class="col-md-4"><a href="/marketplace/fullView/ITEM_ID" style="color: inherit;text-decoration: none;cursor:pointer;"><img src="IMGSRC" style="height:280px;width:100%;margin-top:5px"/>
+	  <h6 style="font-size:1.05rem;letter-spacing:0.065rem;font-family:Montserrat,sans-serif;font-weight:300">TIMESTAMP</h6><hr style='margin-bottom:7px;margin-top:7px'>
+	  <b style='font-size:18px;font-family:Montserrat,sans-serif;text-transform:uppercase'>TITLE_ITEM</b>
+	  <p>
+		<small style='width:100%;letter-spacing:0.065rem;font-family:Montserrat,sans-serif'>DESCRIPTION_ITEM</small>
+		<br>
+		<span style='font-weight:bold;font-size:16px;font-family:Monsterrat, sans-serif;'>$PRICE_ITEM<span>
+	  </p></a></div>`;
+	  
+	  var item_contents = '<div class="row">';
+
+	  for (var i=0;i<items.length;i++){
+		  var itemString = itemMock;
+		  var myItem = items[i].sellerId == req.user._id;
+		  
+		  itemString = itemString.replace("ITEM_ID",items[i]._id);
+		  itemString = itemString.replace("IMGSRC",items[i].images[0].image.toString('utf8'));
+		  itemString = itemString.replace("TIMESTAMP",moment(items[i]._id.getTimestamp()).format('MMM DD, YYYY'));
+		  itemString = itemString.replace("TITLE_ITEM",items[i].title);
+		  itemString = itemString.replace("DESCRIPTION_ITEM",items[i].description);
+		  itemString = itemString.replace("PRICE_ITEM",items[i].price);  
+		  item_contents +=itemString;
+	  }
+	  
+	  // Close the Div
+	  item_contents += '</div>';
+  
+	  // Send the catalog information as Text
+	  res.send(item_contents);
+	});
+}
 
 /**
  * GET /marketplace
