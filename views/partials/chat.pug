@@ -106,109 +106,49 @@ chat
                   li.media
                     .media-body
                       .well.well-lg
-                        h4.media-heading.text-uppercase.reviews Question
+                        if question.asker.profile.name
+                         - var my_name = question.asker.profile.name;
+                        else
+                         - var my_name = "Question";
+
+                        h4.media-heading.text-uppercase.reviews #{my_name}
                         ul.media-date.text-uppercase.reviews.list-inline
                           li #{question.timestamp}
                         p.media-comment
                           | #{question.text}
-                        a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
-                          span.glyphicon.glyphicon-share-alt
-                          |  Reply
-          
-              li.media
-                .media-body
-                  .well.well-lg
-                    h4.media-heading.text-uppercase.reviews Marco 
-                    ul.media-date.text-uppercase.reviews.list-inline
-                      li.dd 22
-                      li.mm 09
-                      li.aaaa 2014
-                    p.media-comment
-                      | Great snippet! Thanks for sharing.
-                    a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
-                      span.glyphicon.glyphicon-share-alt
-                      |  Reply
-                    a.btn.btn-warning.btn-circle.text-uppercase(data-toggle='collapse', href='#replyOne')
-                      span.glyphicon.glyphicon-comment
-                      |  2 comments
-                #replyOne.collapse
-                  ul.media-list
-                    li.media.media-replied
-                      .media-body
-                        .well.well-lg
-                          h4.media-heading.text-uppercase.reviews
-                            span.glyphicon.glyphicon-share-alt
-                            |  The Hipster
-                          ul.media-date.text-uppercase.reviews.list-inline
-                            li.dd 22
-                            li.mm 09
-                            li.aaaa 2014
-                          p.media-comment
-                            | Nice job Maria.
-                          a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
-                            span.glyphicon.glyphicon-share-alt
-                            |  Reply
-                    li#replied.media.media-replied
-                      .media-body
-                        .well.well-lg
-                          h4.media-heading.text-uppercase.reviews
-                            span.glyphicon.glyphicon-share-alt
-                            |  Mary
-                          ul.media-date.text-uppercase.reviews.list-inline
-                            li.dd 22
-                            li.mm 09
-                            li.aaaa 2014
-                          p.media-comment
-                            | Thank you Guys!
-                          a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
-                            span.glyphicon.glyphicon-share-alt
-                            |  Reply
-              li.media
-                .media-body
-                  .well.well-lg
-                    h4.media-heading.text-uppercase.reviews Nico
-                    ul.media-date.text-uppercase.reviews.list-inline
-                      li.dd 22
-                      li.mm 09
-                      li.aaaa 2014
-                    p.media-comment
-                      | I'm looking for that. Thanks!
-                    a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
-                      span.glyphicon.glyphicon-share-alt
-                      |  Reply
-              li.media
-                .media-body
-                  .well.well-lg
-                    h4.media-heading.text-uppercase.reviews Kriztine
-                    ul.media-date.text-uppercase.reviews.list-inline
-                      li.dd 22
-                      li.mm 09
-                      li.aaaa 2014
-                    p.media-comment
-                      | Yehhhh... Thanks for sharing.
-                    a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
-                      span.glyphicon.glyphicon-share-alt
-                      |  Reply
-                    a.btn.btn-warning.btn-circle.text-uppercase(data-toggle='collapse', href='#replyTwo')
-                      span.glyphicon.glyphicon-comment
-                      |  1 comment
-                #replyTwo.collapse
-                  ul.media-list
-                    li.media.media-replied
-                      .media-body
-                        .well.well-lg
-                          h4.media-heading.text-uppercase.reviews
-                            span.glyphicon.glyphicon-share-alt
-                            |  Lizz
-                          ul.media-date.text-uppercase.reviews.list-inline
-                            li.dd 22
-                            li.mm 09
-                            li.aaaa 2014
-                          p.media-comment
-                            | Classy!
-                          a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
-                            span.glyphicon.glyphicon-share-alt
-                            |  Reply
+                        if item.isMyItem
+                         form(action='/marketplace/answerquestion', method='post')
+                          .form-group
+                           input(type='hidden', name='item_id', value=item.itemId)
+                           input(type='hidden', name='question_id', value=question.id)
+                           input#addComment.form-control(style='border-radius:5px',name='answer_text', rows='1', placeholder='Reply with answer')
+                        if question.comments.length > 0
+                            a.btn.btn-warning.btn-circle.text-uppercase(data-toggle='collapse', href='#replyOne')
+                              span.glyphicon.glyphicon-comment
+                              |  #{question.comments.length} comments
+                    if question.comments
+                     #replyOne.collapse
+                      ul.media-list
+                       each comment in question.comments
+                        li.media.media-replied
+                          .media-body
+                            .well.well-lg
+                              if comment.commenter.profile.name
+                                 - var the_name = comment.commenter.profile.name;
+                              else
+                                 - var the_name = "Answer";
+                              h4.media-heading.text-uppercase.reviews
+                                span.glyphicon.glyphicon-share-alt
+                                |  #{the_name}
+                              ul.media-date.text-uppercase.reviews.list-inline
+                                li #{comment.timestamp}
+                              p.media-comment
+                                | #{comment.text}
+                              if false == true
+                               a#reply.btn.btn-info.btn-circle.text-uppercase(href='#')
+                                 span.glyphicon.glyphicon-share-alt
+                                 |  Reply
+                                
           #add-comment.tab-pane
             form#commentForm.form-horizontal(style='height:130px',action='#', method='post', role='form')
               .form-group

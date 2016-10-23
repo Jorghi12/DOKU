@@ -9,7 +9,7 @@ const PickUp = require('../models/PickUps').Pickup;
 const Delivery = require('../models/Delivery').Delivery;
 
 const Question = require('../models/Comments').Question;
-const Comment = require('../models/Comments').Comments;
+const Comment = require('../models/Comments').Comment;
 
 const EMAIL_CONSTANTS = require('../email_strings/Emails');
 const nodemailer = require('nodemailer');
@@ -23,6 +23,52 @@ const transporter = nodemailer.createTransport({
   tls: {rejectUnauthorized: false}
 });
 		
+
+/**
+ * POST /comments/answerquestion
+ *  - Asks a question about an item in the catalog.
+ */
+exports.answerQuestion = (req, res, next) => {
+	if (req.user == null){
+		req.flash('errors', { msg: 'Please log in to answer questions about items.' });
+		return res.redirect('back');
+	}
+	
+	//Check to see if the user owns the item
+	Item.findById(req.body.item_id, function(err, item) {
+		// Error you don't own the item
+		if (item.sellerId != req.user._id){
+			req.flash('info', { msg: 'You don\'t own this item.' });
+			return res.redirect('back');
+		}
+	});
+	
+	// Create a new comment
+	var comment = new Comment({
+		text: req.body.answer_text,
+		commenter: req.user._id,
+		forQuestion: req.body.question_id
+	});
+	
+	// Save the comment
+	comment.save();
+	
+	// Update the question
+	Question.findById(req.body.question_id, function(err, question) {
+		question.comments.push(comment);
+		question.save(function (err) {
+			if (err){
+				req.flash('errors', { msg: 'Error adding your comment to the question.' });
+				return res.redirect('back');
+			}
+		});
+		
+		req.flash('success', { msg: 'Successfully added comment.' });
+		return res.redirect('back');
+	});
+}
+
+
 /**
  * POST /comments/askquestion
  *  - Asks a question about an item in the catalog.
@@ -371,7 +417,6 @@ exports.schedulePickUp = (req, res) => {
 	});
 }
 
-
 /**
  * GET /marketplace/fullView/:itemId
  *  - Obtains the item information for full view display
@@ -380,7 +425,7 @@ exports.itemFullView = (req, res) => {
 	
 	Item.findById({_id: req.params.itemId}).populate(
 			{
-				path:'questions', model:'Question', populate: [{path:'comments', model:'Comment'}]
+				path:'questions', model:'Question', populate: [{path:'comments', model:'Comment', populate: [{path: 'commenter', model:'User'}]},{path:'asker', model:'User'}]
 			}
 		).exec(
 
@@ -399,12 +444,19 @@ exports.itemFullView = (req, res) => {
 		
 		for (var i =0;i<item.questions.length;i++){
 			var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
+			//Add timestamps for each comment
+			for (var j=0;j<item.questions[i].comments.length;j++){
+				item.questions[i].comments[j].timestamp = moment(item.questions[i].comments[j]._id.getTimestamp()).format('MMM DD, YYYY');
+			};
+			
 			mapped_questions.push({
+				id: item.questions[i]._id,
 				text: item.questions[i].question,
 				createdAt: item.questions[i].createdAt,
 				myQuestion: (req.user && (item.questions[i].asker == req.user._id)),
 				comments: item.questions[i].comments,
-				timestamp: timestamp
+				timestamp: timestamp,
+				asker: item.questions[i].asker
 			})
 		}
 		

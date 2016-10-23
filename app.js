@@ -146,6 +146,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.get('/admin', adminController.getAdminPanel);
 app.post('/admin', adminController.postVenmoDeposit);
 app.post('/marketplace/askquestion', marketController.askQuestion)
+app.post('/marketplace/answerquestion', marketController.answerQuestion);
 app.post('/marketplace/search', marketController.searchCatalog)
 app.get('/marketplace', marketController.getCatalog);
 app.get('/marketplace/sell', marketController.getSell);
