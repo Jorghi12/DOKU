@@ -6,6 +6,14 @@
     div#searchbar.row {
         padding-top: 0px;
     }
+
+    a.category {
+    font-family: "Montserrat", sans-serif;
+    font-size:15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    }
+
 }
 
 @media only screen and (min-width: 767px) {
@@ -176,9 +184,6 @@ span.headertab {
     margin-top: 10px;
 }
 
-#sideImage {
-	margin-bottom: 10px;
-}
 
 #sellItem{
 	font-family: "Montserrat", sans-serif;
@@ -320,4 +325,13 @@ a.navigationButton {
 
 #currentlybuying {
     text-align: center;
+}
+
+#mainProductImage {
+    padding-left: 20px;
+}
+
+#sideImage {
+    margin-bottom: 10px;
+    margin-right: 10px;
 }
