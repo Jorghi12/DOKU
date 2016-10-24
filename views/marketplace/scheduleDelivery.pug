@@ -12,23 +12,23 @@ block content
          img(id=item.itemId,src=item.image[0], height=200, style='height:423px;width:500px;')
         .col-xs-12.col-md-12
         h1
-         | <b>Enter your delivery information: </b>
+         | <b>Tell us how we can reach you: </b>
         label(for='deliveryLocation') Delivery Location:    
         <br>
          - var old_loc = item.delivery ? item.delivery.deliveryLocation : ''
-         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryLocation', value=old_loc, placeholder='Your Address', required)
+         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryLocation', value=old_loc, placeholder='Your Address at Cornell', required)
         <br>  
         <br>
         label(for='deliveryPhoneNumber') Contact Info:  
         <br>
          - var old_loc = item.delivery ? item.delivery.deliveryPhoneNumber : ''
-         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryPhoneNumber', value=old_loc, placeholder='Your Phone Number', required)
+         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryPhoneNumber', value=old_loc, placeholder='212-1234567', required)
         <br>  
         <br>
         label(for='deliveryVenmoAccount') Venmo Username:  
         <br>
          - var old_loc = item.delivery ? item.delivery.buyerVenmo : ''
-         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryVenmoAccount', value=old_loc, placeholder='Your Venmo Username', required)
+         input(style='font-size:20px;font-weight:bold',type='text', name='deliveryVenmoAccount', value=old_loc, placeholder='@my-venmo-account', required)
         <br>  
         button.btn.btn-primary(type='submit', style='width:265px')
          |Confirm Delivery

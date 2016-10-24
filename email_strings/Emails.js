@@ -13,7 +13,7 @@ exports.buyerVenmoMessage = (buyer_name) => {
 	var message = {
 		body: CONST_buyerMessage, 
 		subject: 'You’re almost there!',
-		from: 'Julian from Doku'
+		from: 'Julian from Doku',
 	};
 	
 	//Parse body
