@@ -94,6 +94,8 @@ block content
           FB.ui({
             method: 'share',
             display: 'popup',
+			picture : #{item.image[0]},
+			quote: #{item.description},
             href: window.location.href,
           }, function(response){});
          }
