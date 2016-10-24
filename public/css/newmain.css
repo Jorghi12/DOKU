@@ -335,3 +335,7 @@ a.navigationButton {
     margin-bottom: 10px;
     margin-right: 10px;
 }
+
+ul.dropdown-menu {
+    margin-left: 0px;
+}

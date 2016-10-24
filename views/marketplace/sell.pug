@@ -122,7 +122,7 @@ block content
                               .row#selectimagebuttons
                                 label.custom-file-upload
                                   input.cropit-image-input(type='file',accept="image/*" capture="camera")
-                                  .span#selectimagetext SELECT FILE                                
+                                  .span#selectimagetext CHOOSE IMAGES                          
                                 button.btn.btn-primary#addimage(type='button',onclick='addImage()') 
                                   .span#addimagetext ADD IMAGE
                                 span.rotate-cw.glyphicon.glyphicon-repeat(style="float:right")
@@ -158,30 +158,31 @@ block content
                           label(for='item_price') 
                             span.listingfont Category:
                           br
-                          button.btn.btn-default.formButtons.dropdown-toggle(style='font-weight:bold;height:34px;margin-top:-5px', type='button', data-toggle='dropdown')
-                            input.span.noselect#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="Select Category") 
-                            span.glyphicon.glyphicon-chevron-down(style='margin-top:5px')
-                          ul.dropdown-menu.formButtons#drop1(style='margin-left:16px;width:500px')
-                            li
-                              a(href='#',style='font-weight:bold') All Categories
-                            li
-                              a(href='#',style='font-weight:bold') Books
-                            li
-                              a(href='#',style='font-weight:bold') Sublets
-                            li
-                              a(href='#',style='font-weight:bold') Technology & Gadgets
-                            li
-                              a(href='#',style='font-weight:bold') For Him
-                            li
-                              a(href='#',style='font-weight:bold') For Her
-                            li
-                              a(href='#',style='font-weight:bold') Furniture & Home
-                            li
-                              a(href='#',style='font-weight:bold') Tickets
-                            li
-                              a(href='#',style='font-weight:bold') Ride Share
-                            li
-                              a(href='#',style='font-weight:bold') Others
+                          .input-group-btn
+                            button.btn.btn-default.formButtons.dropdown-toggle(style='font-weight:bold;height:34px;margin-top:-5px', type='button', data-toggle='dropdown')
+                              input.span.noselect#modalCategory(name='itemCategory', style='background:transparent;border-color: inherit; -webkit-box-shadow: none; box-shadow: none;border:none;', value="Select Category") 
+                              span.glyphicon.glyphicon-chevron-down(style='margin-top:5px')
+                            ul.dropdown-menu.formButtons#drop1(style='width:400px')
+                              li
+                                a(href='#',style='font-weight:bold') All Categories
+                              li
+                                a(href='#',style='font-weight:bold') Books
+                              li
+                                a(href='#',style='font-weight:bold') Sublets
+                              li
+                                a(href='#',style='font-weight:bold') Technology & Gadgets
+                              li
+                                a(href='#',style='font-weight:bold') For Him
+                              li
+                                a(href='#',style='font-weight:bold') For Her
+                              li
+                                a(href='#',style='font-weight:bold') Furniture & Home
+                              li
+                                a(href='#',style='font-weight:bold') Tickets
+                              li
+                                a(href='#',style='font-weight:bold') Ride Share
+                              li
+                                a(href='#',style='font-weight:bold') Others
                           
                           input.btn.btn-primary#submitlisting(style='border-radius:5px;font-size:30px;font-weight:bold',type='submit',value='Create Listing',data-transition='fade', data-theme='c')
                     .row
