@@ -25,6 +25,7 @@ block content
            <br>
         .col-xs-6.col-md-6
          img#mainProductImage(src=item.image[0], height=200, style='height:64%;width:80%;')
+         p
         .col-xs-4.col-md-5
          div(style='overflow:hidden;')
           .form-group
@@ -49,9 +50,11 @@ block content
           |PURCHASE WITH Venmo
          a.btn.btn-warning(style='width:100%;margin-top:5px', data-transition='fade', data-theme='c',data-toggle='modal', data-target='#myModal')
           |ASK A QUESTION
+         a.btn.btn-info#shareBtn(style='width:100%;margin-top:5px')
+          |SHARE TO FACEBOOK
        .row
          include ../partials/chat
-		 
+         
        // Modal
        #myModal.modal.fade(role='dialog')
           .modal-dialog
@@ -70,3 +73,27 @@ block content
               .modal-footer
                 button.btn.btn-default(type='button', data-dismiss='modal') Close
                 button.btn.btn-warning(type='submit') Ask Question
+       script.
+         window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '1277819765573106',
+              xfbml      : true,
+              version    : 'v2.8'
+            });
+            FB.AppEvents.logPageView();
+         };
+         (function(d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) return;
+           js = d.createElement(s); js.id = id;
+           js.src = "//connect.facebook.net/es_LA/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+       
+         document.getElementById('shareBtn').onclick = function() {
+          FB.ui({
+            method: 'share',
+            display: 'popup',
+            href: window.location.href,
+          }, function(response){});
+         }
