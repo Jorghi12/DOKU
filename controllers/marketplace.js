@@ -299,7 +299,7 @@ exports.confirmPickUp = (req,res) => {
 						
 						req.flash('success', { msg: 'A PickUp date has been successfully scheduled!'});
 						
-						var theDelivery = null;
+						/*var theDelivery = null;
 						for (var i=0;i<item.delivery.length;i++){
 							if (item.delivery[i].sentDeposit){
 								theDelivery = item.delivery[i];
@@ -310,7 +310,7 @@ exports.confirmPickUp = (req,res) => {
 						User.findById(theDelivery.buyerId, function(err, buyer){
 							// Send Confirmation to both the Buyer and the Seller!
 							exports.notifyBothBuyerAndSellerOfTransaction(req, res, buyer, req.user, item, pickUp);
-						});
+						});*/
 						return exports.showMyPage(req,res);
 					})
 					
