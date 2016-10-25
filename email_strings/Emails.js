@@ -46,7 +46,7 @@ exports.sellerAvailaibilityMessage = (item_name,confirmation_link) => {
 	
 	//Parse body
 	message.body = message.body.replace("%item_name%",item_name);
-	message.body = message.body.replace("*insert link to confirmation*","<a href='" + confirmation_link + "'></a>");
+	message.body = message.body.replace("*insert link to confirmation*",confirmation_link);
 	
 	return message;
 }

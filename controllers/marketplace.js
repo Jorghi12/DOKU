@@ -209,9 +209,9 @@ exports.sendEmailToBuyerAskingForVenmo = (req, res) =>{
 	//Send email to the buyer
 	const toBuyerEmail = {
 	  to: buyerEmail,
-	  from: buyerMessage.name + 'Doku <hello@dokumarket.com>',
+	  from: buyerMessage.name + ' <hello@dokumarket.com>',
 	  subject: 'Venmo Instructions | dokumarket.com',
-	  html: buyerMessage.body
+	  text: buyerMessage.body
 	};
 	transporter.sendMail(toBuyerEmail);
 }
@@ -634,6 +634,8 @@ function(err, items) {
 		  var image = item.images[i];
 		  imageStrings.push(image.image.toString('utf8'));
 	  };
+	  
+	  /*
 	  //Has someone paid?
 	  var someonePaid = false;
 	  for (var i =0;i<item.delivery.length;i++){
@@ -642,7 +644,11 @@ function(err, items) {
 			  break;
 		  }
 	  }
-      itemsToSell.push({pickup: item.pickup, category: item.category, title: item.title, readyForSchedule: someonePaid,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
+	  //readyForSchedule: someonePaid
+	  */
+	  var someoneBuying = item.buyers.length > 0;
+	  
+      itemsToSell.push({pickup: item.pickup, category: item.category, title: item.title, readyForSchedule: someoneBuying,isMyItem: item.sellerId == req.user._id, itemId: item._id, image: imageStrings, description: item.description, price: item.price});
     });
 
 	//Pull the currently bought items.
