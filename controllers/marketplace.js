@@ -191,7 +191,7 @@ exports.sendEmailToSellerAskingForAvailability = (req, res, item) => {
 		  to: sellerEmail,
 		  from: sellerMessage.name + ' <hello@dokumarket.com>',
 		  subject: 'Item Availability | dokumarket.com',
-		  text: sellerMessage.body
+		  html: sellerMessage.body
 		};
 		transporter.sendMail(toSellerEmail);
 	})
@@ -211,7 +211,7 @@ exports.sendEmailToBuyerAskingForVenmo = (req, res) =>{
 	  to: buyerEmail,
 	  from: buyerMessage.name + 'Doku <hello@dokumarket.com>',
 	  subject: 'Venmo Instructions | dokumarket.com',
-	  text: buyerMessage.body
+	  html: buyerMessage.body
 	};
 	transporter.sendMail(toBuyerEmail);
 }
@@ -236,7 +236,7 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
 	  to: buyerEmail,
 	  from: buyerMessage.name + ' <hello@dokumarket.com>',
 	  subject: 'Complete! | dokumarket.com',
-	  text: buyerMessage.body
+	  html: buyerMessage.body
 	};
 	transporter.sendMail(toBuyerEmail);
 
@@ -245,7 +245,7 @@ exports.notifyBothBuyerAndSellerOfTransaction = (req, res, buyer, seller, item, 
 	  to: sellerEmail,
 	  from: sellerMessage.name + ' <hello@dokumarket.com>',
 	  subject: 'Complete! | dokumarket.com',
-	  text: sellerMessage.body
+	  html: sellerMessage.body
 	};
 	transporter.sendMail(toSellerEmail);
 }
