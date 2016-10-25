@@ -14,6 +14,7 @@ exports.buyerVenmoMessage = (buyer_name) => {
 		body: CONST_buyerMessage, 
 		subject: 'You’re almost there!',
 		from: 'Julian from Doku',
+		name: 'Julian from Doku'
 	};
 	
 	//Parse body
@@ -39,7 +40,8 @@ exports.sellerAvailaibilityMessage = (item_name,confirmation_link) => {
 	var message = {
 		body: CONST_sellerAvailability, 
 		subject: 'Someone wants to buy your item!',
-		from: 'Julian from Doku'
+		from: 'Julian from Doku',
+		name: 'Julian from Doku'
 	};
 	
 	//Parse body
@@ -92,7 +94,8 @@ exports.finalConfirmationSeller = (seller_name,item_name,pickup_address,pickup_t
 	var message = {
 		body: CONST_finalSellerMessage, 
 		subject: 'Congratulations on selling!',
-		from: 'Julian from Doku'
+		from: 'Julian from Doku',
+		name: 'Julian from Doku'
 	};
 	
 	//Parse body

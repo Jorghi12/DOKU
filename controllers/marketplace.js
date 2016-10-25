@@ -209,7 +209,7 @@ exports.sendEmailToBuyerAskingForVenmo = (req, res) =>{
 	//Send email to the buyer
 	const toBuyerEmail = {
 	  to: buyerEmail,
-	  from: buyerMessage.name + ' <hello@dokumarket.com>',
+	  from: buyerMessage.name + 'Doku <hello@dokumarket.com>',
 	  subject: 'Venmo Instructions | dokumarket.com',
 	  text: buyerMessage.body
 	};
@@ -339,7 +339,7 @@ exports.scheduleDelivery = (req, res) => {
 			return res.redirect('/marketplace');
 		}
 		
-		//Pull the images from the Item
+		//Pull the images from the Item	
 		var imageStrings = [];
 	    for (var i = 0;i < item.images.length; i++){
 		    var image = item.images[i];
