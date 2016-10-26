@@ -78,13 +78,6 @@ block content
          - var old_loc = item.delivery ? item.delivery.deliveryLocation : ''
          input(style='font-size:20px;font-weight:bold',type='text', name='deliveryLocation', value=old_loc, placeholder='Your Address at Cornell', required)
         <br>  
-        h4(style='display:inline-block')
-         | <b>Meet up</b>
-        label.switch(style='display:inline-block')
-          input(type='checkbox')
-          .slider
-        h4(style='display:inline-block')
-         | <b>Delivery</b>
         <br>
         label(for='deliveryPhoneNumber') Contact Info:  
         <br>
@@ -97,5 +90,13 @@ block content
          - var old_loc = item.delivery ? item.delivery.buyerVenmo : ''
          input(style='font-size:20px;font-weight:bold',type='text', name='deliveryVenmoAccount', value=old_loc, placeholder='@my-venmo-account', required)
         <br>  
+        <br>
+        h6(style='display:inline-block')
+         | <b>If you would rather set up a meeting with the buyer yourself.</b>
+        label.switch(style='display:inline-block')
+          input(type='checkbox')
+          .slider
+        <br>
+        <br>
         button.btn.btn-primary(type='submit', style='width:265px')
          |Confirm Delivery
