@@ -97,7 +97,7 @@ block content
      }
      
      function loadMore(){
-        $.get("/marketplace/loadmore",{searchQuery: '', category: '', page: window.startPage}, function(item_contents, status){
+        $.get("/marketplace/loadmore",{searchQuery: '#{search_text}', category: '#{category}', page: window.startPage}, function(item_contents, status){
             $( ".row" ).last().after(item_contents);
         });
      }
