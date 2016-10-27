@@ -768,11 +768,11 @@ exports.searchCatalog = (req, res) => {
  */
 exports.catalogLoadMore = (req, res) => {
 	// Category, Search Specifier, Range Requested
-	var PER_PAGE = 3;
+	var PER_PAGE = 9;
 	console.log(req.query);
 	var PAGE = req.query.page;
 	var category = req.query.category == "All Categories" ? ".*" : req.query.category;
-	Item.find().limit(PER_PAGE).skip(PER_PAGE * PAGE).sort([['_id', -1]]).or(
+	Item.find().sort([['_id', -1]]).limit(PER_PAGE).skip(PER_PAGE * PAGE).or(
     [
 		{"title": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}},
 		{"description": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}}
@@ -815,7 +815,7 @@ exports.catalogLoadMore = (req, res) => {
  * List of Catalog items.
  */
 exports.getCatalog = (req, res) => {
-  var PER_PAGE = 3;
+  var PER_PAGE = 9;
   Item.find({}).sort([['_id', -1]]).limit(PER_PAGE).exec(function(err, items) {
     var itemMap = [];
 
