@@ -115,6 +115,51 @@ exports.askQuestion = (req,res,next) => {
  */
 exports.confirmDelivery = (req,res) => {
 	Item.findById(req.body.item_id, function(err, item) {
+		//Add the buyer to the Item's buyer list.
+		if (item.buyers.indexOf(req.user._id) == -1){
+			item.buyers.push(req.user._id)
+		}
+		
+		//Save the item.
+		item.save(function (err) {
+			if(err) {
+				//Failed to update.
+				req.flash('errors', { msg: 'Failed to purchase item.' });
+			}
+			
+			//Add the item to the Buyer's 'bought' list.
+			populateUserShopInfo(req.user._id, function(user){
+				if(!user) {
+					//Could not find the buyer's user account
+					req.flash('errors', { msg: 'Failed to purchase item.' });
+				}
+				//console.log(user);
+				if (user.userShopInfo.buyInfo.itemsBeingPurchased.indexOf(req.params.itemId) == -1){
+					user.userShopInfo.buyInfo.itemsBeingPurchased.push(req.params.itemId)
+				}
+				else
+				{
+					//User is already buying the item!
+					req.flash('info', { msg: 'You\'ve already purchased the item.' });
+					
+					//Show the transactions page
+					return exports.showMyPage(req,res);
+				}
+				
+				//Access the actual 'buyInfo' model populated by the user account
+				user.userShopInfo.buyInfo.save(
+					function (err) {
+						user.save(function (err) {
+							if(err) {
+								//Could not save the user's shop info
+								req.flash('errors', { msg: 'Failed to purchase item.' });
+							}
+						});
+					}
+				)
+			});
+		});
+		
 		Delivery.findOne({item: req.body.item_id, buyerId: req.user._id}, function (err, delivery){
 			if (delivery && delivery.inProgress){
 				//A delivery under this item already exists
@@ -170,7 +215,6 @@ exports.confirmDelivery = (req,res) => {
 						
 						return exports.showMyPage(req,res);
 					})
-					
 			});
 		});
 	});
@@ -504,53 +548,8 @@ exports.buyItem = (req, res) => {
 			return res.redirect('/marketplace');
 		}
 		
-		//Add the buyer to the Item's buyer list.
-		if (item.buyers.indexOf(req.user._id) == -1){
-			item.buyers.push(req.user._id)
-		}
-		
-		//Save the item.
-		item.save(function (err) {
-			if(err) {
-				//Failed to update.
-				req.flash('errors', { msg: 'Failed to purchase item.' });
-			}
-			
-			//Add the item to the Buyer's 'bought' list.
-			populateUserShopInfo(req.user._id, function(user){
-				if(!user) {
-					//Could not find the buyer's user account
-					req.flash('errors', { msg: 'Failed to purchase item.' });
-				}
-				//console.log(user);
-				if (user.userShopInfo.buyInfo.itemsBeingPurchased.indexOf(req.params.itemId) == -1){
-					user.userShopInfo.buyInfo.itemsBeingPurchased.push(req.params.itemId)
-				}
-				else
-				{
-					//User is already buying the item!
-					req.flash('info', { msg: 'You\'ve already purchased the item.' });
-					
-					//Show the transactions page
-					return exports.showMyPage(req,res);
-				}
-				
-				//Access the actual 'buyInfo' model populated by the user account
-				user.userShopInfo.buyInfo.save(
-					function (err) {
-						user.save(function (err) {
-							if(err) {
-								//Could not save the user's shop info
-								req.flash('errors', { msg: 'Failed to purchase item.' });
-							}
-							
-							//Directly get the buyer to schedule a delivery!
-							exports.scheduleDelivery(req, res);
-						});
-					}
-				)
-			});
-		});
+		//Directly get the buyer to schedule a delivery!
+		exports.scheduleDelivery(req, res);
 	});
 }
 
