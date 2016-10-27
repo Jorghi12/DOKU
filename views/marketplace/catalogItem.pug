@@ -32,13 +32,6 @@ block content
            .row
             .col-md-8
              #datetimepicker12
-          script(type='text/javascript').
-            $(function () {
-            $('#datetimepicker12').datetimepicker({
-            inline: true,
-            sideBySide: true
-            });
-            });
 
          h3(style='letter-spacing:.25rem;text-transform:uppercase;font-weight:300;margin-top:-18px')
           | #{item.title}
@@ -94,7 +87,7 @@ block content
           FB.ui({
             method: 'share',
             display: 'popup',
-            quote: #{item.description},
+            quote: "#{item.description}",
             href: window.location.href,
           }, function(response){});
          }
