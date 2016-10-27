@@ -768,7 +768,7 @@ exports.searchCatalog = (req, res) => {
  */
 exports.catalogLoadMore = (req, res) => {
 	// Category, Search Specifier, Range Requested
-	var PER_PAGE = 9;
+	var PER_PAGE = 3;
 	console.log(req.query);
 	var PAGE = req.query.page;
 	var category = req.query.category == "All Categories" ? ".*" : req.query.category;
