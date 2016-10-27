@@ -614,10 +614,7 @@ exports.removeItem = (req, res) => {
 exports.showMyPage = (req, res) => {
 	if (req.user == null){
 		req.flash('info', { msg: 'Please log in to access your transactions.' });
-		res.render('marketplace/index', {
-		  title: 'Marketplace'
-		});
-		return;
+		return exports.getCatalog(req, res);
 	}
 	Item.find({sellerId: req.user._id}).populate(
 			{
