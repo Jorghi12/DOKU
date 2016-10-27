@@ -22,7 +22,32 @@ const transporter = nodemailer.createTransport({
   },
   tls: {rejectUnauthorized: false}
 });
+
+
+// Return an image
+exports.getImage = (req, res) => {
+	Item.findById({_id: req.params.itemId}, function(err, item){
+		/*res.writeHead(200, {
+			'Content-Type': mimetype,
+			'Content-Length': data.length
+		});
+		res.end(new Buffer(data, 'binary'));*/
+	
+		var imageObject = item.images[0];
+		var imageString = imageObject.image.toString('binary');
 		
+		var im = imageString.split(",")[1];
+
+		var img = new Buffer(im, 'base64');
+
+		res.writeHead(200, {
+		   'Content-Type': 'image/jpg',
+		   'Content-Length': img.length
+		});
+
+		res.end(img); 
+	});
+}
 
 /**
  * POST /comments/answerquestion

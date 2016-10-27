@@ -87,6 +87,7 @@ block content
           FB.ui({
             method: 'share',
             display: 'popup',
+            picture: "http://dokumarket.com/marketplace/images/#{item.itemId}",
             quote: "#{item.description}",
             href: window.location.href,
           }, function(response){});

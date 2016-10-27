@@ -153,6 +153,7 @@ app.get('/marketplace/loadmore', marketController.catalogLoadMore);
 app.get('/marketplace/sell', marketController.getSell);
 app.post('/marketplace/sell', marketController.sellNewItem);
 app.get('/marketplace/fullView/:itemId', marketController.itemFullView);
+app.get('/marketplace/images/:itemId\.jpg', marketController.getImage);
 app.get('/transactions', marketController.showMyPage);
 app.get('/transactions/remove/:itemId', marketController.removeItem);
 app.post('/transactions/update', marketController.updateItem);
