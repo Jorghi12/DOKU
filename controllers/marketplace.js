@@ -550,10 +550,9 @@ exports.itemFullView = (req, res) => {
 						  timestamp: timestamp,
 						  questions: mapped_questions
 	    };
-		console.log("#GAINZ");
-		console.log(mapped_questions);
+		
 		res.render('marketplace/catalogItem', {
-		  title: 'Marketplace: ' + item.title,
+		  title: item.title,
 		  item: mappedItem
 		});
 	});
