@@ -716,7 +716,7 @@ function(err, items) {
 exports.searchCatalog = (req, res) => {
   console.log("JORG DOKU");
   console.log(req.body.selectedCategory);
-  var PER_PAGE = 3;
+  var PER_PAGE = 9;
   var category = req.body.selectedCategory == "All Categories" ? ".*" : req.body.selectedCategory;
   console.log(category);
   Item.find().sort([['_id', -1]]).limit(PER_PAGE).or(
