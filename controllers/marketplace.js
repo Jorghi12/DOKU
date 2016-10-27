@@ -771,7 +771,7 @@ exports.catalogLoadMore = (req, res) => {
 	console.log(req.query);
 	var PAGE = req.query.page;
 	var category = req.query.category == "All Categories" ? ".*" : req.query.category;
-	Item.find().limit(PER_PAGE).skip(PER_PAGE * PAGE).sort([['updatedAt', 'descending']]).or(
+	Item.find().limit(PER_PAGE).skip(PER_PAGE * PAGE).sort([['_id', -1]]).or(
     [
 		{"title": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}},
 		{"description": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}}
