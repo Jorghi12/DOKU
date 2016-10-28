@@ -776,7 +776,7 @@ exports.catalogLoadMore = (req, res) => {
 	
 	//Filter Category
 	if (req.query.category == null || req.query.category == "" || req.query.category == "All Categories"){
-		category = "*";
+		category = ".*";
 	}
 	
 	//Filter Search Query
