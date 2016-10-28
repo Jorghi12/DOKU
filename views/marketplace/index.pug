@@ -115,7 +115,7 @@ block content
      }
      
      $(window).scroll(function() {
-       if($(window).scrollTop() + $(window).height() == getDocHeight()) {
+       if((getDocHeight() - ($(window).scrollTop() + $(window).height())) <= 10) {
            if(window.canGo == 1){
                window.canGo = 0;
                loadMore();
