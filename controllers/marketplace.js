@@ -698,10 +698,15 @@ function(err, items) {
 				return {waitingOnDeposit: !depositSent,sellerConfirmed: (item.pickup != null),category: item.category, title: item.title, itemId: item._id, image: imageStrings, description: item.description, price: item.price};
 			});
 			
+			var mode = 0;
+			if (req.params.mode == "selling"){mode = 0};
+			if (req.params.mode == "buying"){mode = 1};
+			
 			res.render('marketplace/transactions', {
 			  title: 'My Transactions',
 			  items: itemsToSell,
-			  purchasedItems: mappedItemsToPurchase
+			  purchasedItems: mappedItemsToPurchase,
+			  initialTab: mode
 			});
 		});
 	});

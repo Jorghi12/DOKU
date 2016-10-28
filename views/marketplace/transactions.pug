@@ -15,11 +15,11 @@ block content
       h2.title My Shopping
     hr
     ul.nav.nav-tabs
-      li.active
-        a(data-toggle='tab', href='#home') Currently Selling
-      li
+      li(class=initialTab === 0 ? 'active' : '')
+       a(data-toggle='tab', href='#home') Currently Selling
+      li(class=initialTab === 1 ? 'active' : '')
         a(data-toggle='tab', href='#menu1') Currently Buying
-      li
+      li(class=initialTab === 2 ? 'active' : '')
         a(data-toggle='tab', href='#menu2' style='visibility:hidden') Transaction History
     .tab-content
       #home.tab-pane.fade.in.active
