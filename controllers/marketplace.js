@@ -795,7 +795,13 @@ exports.catalogLoadMore = (req, res) => {
 		  itemString = itemString.replace("IMGSRC",items[i].images[0].image.toString('utf8'));
 		  itemString = itemString.replace("TIMESTAMP",moment(items[i]._id.getTimestamp()).format('MMM DD, YYYY'));
 		  itemString = itemString.replace("TITLE_ITEM",items[i].title);
-		  itemString = itemString.replace("DESCRIPTION_ITEM",items[i].description);
+		  
+		  var shortDescription = items[i].description;
+		  if (shortDescription.length >= 27) {
+			  shortDescription = shortDescription.substr(0,24) + "...";
+		  }
+		  
+		  itemString = itemString.replace("DESCRIPTION_ITEM",shortDescription);
 		  itemString = itemString.replace("PRICE_ITEM",items[i].price);  
 		  item_contents +=itemString;
 	  }
