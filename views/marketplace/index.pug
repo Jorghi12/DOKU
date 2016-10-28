@@ -87,7 +87,6 @@ block content
     script(text='text/javascript').
      window.startPage = 3;
      window.canGo = 1;
-     window.counter=0;
      $("#drop1 li").click(function(e){
       document.getElementById("category_choice").value = $(this).text();
       $("#run_search_query").click();
@@ -103,31 +102,48 @@ block content
             $( ".row" ).last().after(item_contents);
             window.startPage +=1;
             window.canGo = 1;
-            console.log("Step3");
-        });
+        }).fail(function() {
+			window.canGo = 1;
+		});
      }
      
-     function getDocHeight() {
-        var D = document;
-        return Math.max(
-            D.body.scrollHeight, D.documentElement.scrollHeight,
-            D.body.offsetHeight, D.documentElement.offsetHeight,
-            D.body.clientHeight, D.documentElement.clientHeight
-        );
-     }
-     
-     $(window).scroll(function() {
-        window.counter +=1
-       if($(window).scrollTop() + $(window).height() == getDocHeight()) {
-           console.log("Step1");
-           if(window.canGo == 1){
-               window.canGo = 0;
-               loadMore();
-               console.log("Step2");
-           }
-       }
-     });
+	function getScrollXY() {
+		var scrOfX = 0, scrOfY = 0;
+		if( typeof( window.pageYOffset ) == 'number' ) {
+			//Netscape compliant
+			scrOfY = window.pageYOffset;
+			scrOfX = window.pageXOffset;
+		} else if( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
+			//DOM compliant
+			scrOfY = document.body.scrollTop;
+			scrOfX = document.body.scrollLeft;
+		} else if( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
+			//IE6 standards compliant mode
+			scrOfY = document.documentElement.scrollTop;
+			scrOfX = document.documentElement.scrollLeft;
+		}
+		return [ scrOfX, scrOfY ];
+	}
 
+	//taken from http://james.padolsey.com/javascript/get-document-height-cross-browser/
+	function getDocHeight() {
+		var D = document;
+		return Math.max(
+			D.body.scrollHeight, D.documentElement.scrollHeight,
+			D.body.offsetHeight, D.documentElement.offsetHeight,
+			D.body.clientHeight, D.documentElement.clientHeight
+		);
+	}
+
+	document.addEventListener("scroll", function (event) {
+		if (getDocHeight() == getScrollXY()[1] + window.innerHeight) {
+		   if(window.canGo == 1){
+			   window.canGo = 0;
+			   loadMore();
+		   }
+		}
+	});
+     
     .row#gainzAreHere
      -var index = 3
         each item in items
