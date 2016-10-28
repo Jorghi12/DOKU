@@ -86,6 +86,7 @@ block content
 
     script(text='text/javascript').
      window.startPage = 3;
+     window.canGo = 1;
      $("#drop1 li").click(function(e){
       document.getElementById("category_choice").value = $(this).text();
       $("#run_search_query").click();
@@ -99,22 +100,26 @@ block content
      function loadMore(){
         $.get("/marketplace/loadmore",{searchQuery: '#{search_text}', category: '#{category}', page: window.startPage}, function(item_contents, status){
             $( ".row" ).last().after(item_contents);
+            window.startPage +=1;
+            window.canGo = 1;
         });
      }
      
-	 function getDocHeight() {
-		var D = document;
-		return Math.max(
-			D.body.scrollHeight, D.documentElement.scrollHeight,
-			D.body.offsetHeight, D.documentElement.offsetHeight,
-			D.body.clientHeight, D.documentElement.clientHeight
-		);
-	 }
-	 
+     function getDocHeight() {
+        var D = document;
+        return Math.max(
+            D.body.scrollHeight, D.documentElement.scrollHeight,
+            D.body.offsetHeight, D.documentElement.offsetHeight,
+            D.body.clientHeight, D.documentElement.clientHeight
+        );
+     }
+     
      $(window).scroll(function() {
        if($(window).scrollTop() + $(window).height() == getDocHeight()) {
-           loadMore();
-           window.startPage +=1;
+           if(window.canGo == 1){
+               window.canGo = 0;
+               loadMore();
+           }
        }
      });
 
