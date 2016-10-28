@@ -110,7 +110,8 @@ block content
     function getScrollXY() {
         var scrOfX = 0;
         var scrOfY = 0;
-        if( typeof( window.pageYOffset ) == 'number' ) {
+		var aType = typeof(window.pageYOffset) == 'number';
+        if( aType ) {
             //Netscape compliant
             scrOfY = window.pageYOffset;
             scrOfX = window.pageXOffset;
