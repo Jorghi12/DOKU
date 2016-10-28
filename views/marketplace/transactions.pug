@@ -103,15 +103,15 @@ block content
                  img(id='modalImage', height=200, style='height:262px;width:337px;')
                .col-sm-3(style='margin-left:30px')
                     label(for='modalTitle') Title
-                        textarea#modalTitle.form-control(name='itemTitle',rows='1',style="resize:none;width:130%")
+                        textarea#modalTitle.form-control(name='itemTitle',rows='1',style="resize:none;width:130%", required=true)
                     p
                     label(for='modalDesc') Description
-                        textarea#modalDesc.form-control(name='itemDescription',rows='5',style="resize:none;width:130%")
+                        textarea#modalDesc.form-control(name='itemDescription',rows='5',style="resize:none;width:130%", required=true)
                     p
                     label(for='modalPrice') Price
                         .input-group
                          span.input-group-addon $
-                         input#modalPrice.form-control(type='text', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:130%")
+                         input#modalPrice.form-control(type='number', step='0.01', name='itemPrice', aria-label='Amount (to the nearest dollar)',style="resize:none;width:130%", required=true)
                .col-sm-3(style='margin-left:40px')
                 label(for='modalCat') Category
                     button.btn.btn-default.dropdown-toggle(style='font-weight:bold;height:34px', type='button', data-toggle='dropdown')
