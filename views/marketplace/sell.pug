@@ -142,17 +142,17 @@ block content
                           .row#itemtitle
                           label(for='item_title') 
                             span.listingfont Title:
-                              input.formButtons.form-control(type='text', name='itemTitle',style="width:500px",placeholder='Flatscreen TV')
+                              input.formButtons.form-control(type='text', name='itemTitle',style="width:500px",placeholder='Flatscreen TV', required=true)
                           .row#itemdescription
                           label(for='item_desc') 
                             span.listingfont Description:
-                              textarea#item_desc.formButtons.form-control(name='description',rows='5',style="resize:none;width:500px",placeholder='A Samsung flatscreen Television. With a refresh rate of 120CMR, an LED Backlight, & built in Wi-Fi. Dimensions of 44.4" x 25.8" x 2.5". 8/10 Condition because of slight scratches on the screen.')
+                              textarea#item_desc.formButtons.form-control(name='description',rows='5',style="resize:none;width:500px",placeholder='A Samsung flatscreen Television. With a refresh rate of 120CMR, an LED Backlight, & built in Wi-Fi. Dimensions of 44.4" x 25.8" x 2.5". 8/10 Condition because of slight scratches on the screen.', required=true)
                           
                           .row#itemprice
                           label(for='item_price') 
                             span.listingfont Price:
                               .input-group
-                               input.formButtons.form-control(type='text', name='price',aria-label='Amount (to the nearest dollar)',style="width:500px;height:40px;font-size:16px",placeholder='10.00')
+                               input.formButtons.form-control(type="number", step="0.01", name='price',aria-label='Amount (to the nearest dollar)',style="width:500px;height:40px;font-size:16px",placeholder='10.00', required=true)
 
                           .row#itemcategory
                           label(for='item_price') 
