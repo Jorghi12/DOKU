@@ -87,6 +87,7 @@ block content
     script(text='text/javascript').
      window.startPage = 3;
      window.canGo = 1;
+     window.counter=0;
      $("#drop1 li").click(function(e){
       document.getElementById("category_choice").value = $(this).text();
       $("#run_search_query").click();
@@ -102,6 +103,7 @@ block content
             $( ".row" ).last().after(item_contents);
             window.startPage +=1;
             window.canGo = 1;
+            console.log("Step3");
         });
      }
      
@@ -115,10 +117,13 @@ block content
      }
      
      $(window).scroll(function() {
+        window.counter +=1
        if($(window).scrollTop() + $(window).height() == getDocHeight()) {
+           console.log("Step1");
            if(window.canGo == 1){
                window.canGo = 0;
                loadMore();
+               console.log("Step2");
            }
        }
      });

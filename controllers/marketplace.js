@@ -746,8 +746,8 @@ exports.searchCatalog = (req, res) => {
 		  //Grab the timestamp of the item
 		  var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
 		  var shortDescription = item.description;
-		  if (shortDescription.length >= 27) {
-			  shortDescription = shortDescription.substr(0,24) + "...";
+		  if (shortDescription.length >= 35) {
+			  shortDescription = shortDescription.substr(0,35) + "...";
 		  }
 		  
 		  itemMap.push({timestamp: timestamp,isMyItem: myID, itemId: item._id, image: imageStrings, description: shortDescription, price: item.price, title: item.title});
@@ -797,8 +797,8 @@ exports.catalogLoadMore = (req, res) => {
 		  itemString = itemString.replace("TITLE_ITEM",items[i].title);
 		  
 		  var shortDescription = items[i].description;
-		  if (shortDescription.length >= 27) {
-			  shortDescription = shortDescription.substr(0,24) + "...";
+		  if (shortDescription.length >= 35) {
+			  shortDescription = shortDescription.substr(0,35) + "...";
 		  }
 		  
 		  itemString = itemString.replace("DESCRIPTION_ITEM",shortDescription);
