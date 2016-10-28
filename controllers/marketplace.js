@@ -771,11 +771,23 @@ exports.catalogLoadMore = (req, res) => {
 	var PER_PAGE = 3;
 	console.log(req.query);
 	var PAGE = req.query.page;
-	var category = req.query.category == "All Categories" ? ".*" : req.query.category;
+	var category = req.query.category;
+	var search_query = req.query.searchQuery;
+	
+	//Filter Category
+	if (req.query.category == null || req.query.category == "" || req.query.category == "All Categories"){
+		category = "*";
+	}
+	
+	//Filter Search Query
+	if (req.query.searchQuery == null){
+		search_query = "";
+	}
+	
 	Item.find().sort([['_id', -1]]).limit(PER_PAGE).skip(PER_PAGE * PAGE).or(
     [
-		{"title": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}},
-		{"description": { "$regex": req.query.searchQuery, "$options": "i" }, "category":{"$regex":category, "$options": ""}}
+		{"title": { "$regex": search_query, "$options": "i" }, "category":{"$regex":category, "$options": ""}},
+		{"description": { "$regex": search_query, "$options": "i" }, "category":{"$regex":category, "$options": ""}}
 	]).exec(
 	function(err,items) {
 		var itemMock = `<div class="col-md-4"><a href="/marketplace/fullView/ITEM_ID" style="color: inherit;text-decoration: none;cursor:pointer;"><img src="IMGSRC" style="height:280px;width:100%;margin-top:5px"/>
