@@ -791,8 +791,6 @@ exports.catalogLoadMore = (req, res) => {
 
 	  for (var i=0;i<items.length;i++){
 		  var itemString = itemMock;
-		  var myItem = items[i].sellerId == req.user._id;
-		  
 		  itemString = itemString.replace("ITEM_ID",items[i]._id);
 		  itemString = itemString.replace("IMGSRC",items[i].images[0].image.toString('utf8'));
 		  itemString = itemString.replace("TIMESTAMP",moment(items[i]._id.getTimestamp()).format('MMM DD, YYYY'));
