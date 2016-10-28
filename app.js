@@ -205,11 +205,9 @@ app.get('/auth/instagram/callback', passport.authenticate('instagram', { failure
 });
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
-	if (req.session.returnTo == "/marketplace/loadmore"){
-		res.redirect('/');
-	}
-	console.log("GAINS BRO");
-	console.log(req.session.returnTo);
+  if (req.session.returnTo == "/marketplace/loadmore"){
+	res.redirect('/');
+  }
   res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/github', passport.authenticate('github'));
