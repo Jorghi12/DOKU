@@ -122,6 +122,8 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: '2h' }));
 /**
  * Primary app routes.
  */
+
+app.get('/about', (req, res) => {return res.render('about', {title: 'Who we are!'});});
 app.get('/', marketController.getCatalog);//homeController.index);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);

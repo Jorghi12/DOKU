@@ -1,16 +1,8 @@
 extends ../layout
 
 block content
-
     .row#searchbar
       h2.title Snap to Sell. We're at Your Bell. 
-      .row(class="center-block",style="display:block")
-        .col-md-2
-          img(src='/step1.png', style='height:100px;width:100px;margin-top:5px')
-        .col-md-2
-          img(src='/step2.png', style='height:100px;width:100px;margin-top:5px')
-        .col-md-2
-          img(src='/step3.png', style='height:100px;width:100px;margin-top:5px')
       h1.subtitle We pickup from your door and deliver it to your buyer. 
       form.navbar-form(action='/marketplace/search', method='post')
         .row.mainsearch
