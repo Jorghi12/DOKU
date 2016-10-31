@@ -563,6 +563,10 @@ exports.itemFullView = (req, res) => {
  *  - Purchases an item off the site (if you aren't the seller)
  */
 exports.buyItem = (req, res) => {
+	if (req.user == null){
+		req.flash('info', { msg: 'Please log in to purchase an item.' });
+		return res.redirect('back');
+	}
 	Item.findById(req.params.itemId, function(err, item) {
 		if (item.sellerId == req.user._id){
 			//Cannot purchase your own item
@@ -773,7 +777,7 @@ exports.searchCatalog = (req, res) => {
  */
 exports.catalogLoadMore = (req, res) => {
 	// Category, Search Specifier, Range Requested
-	var PER_PAGE = 3;
+	var PER_PAGE = 6;
 	console.log(req.query);
 	var PAGE = req.query.page;
 	var category = req.query.category;
