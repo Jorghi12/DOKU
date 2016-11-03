@@ -343,6 +343,7 @@ exports.confirmPickUp = (req,res) => {
 				pickUp.pickupDateTime = req.body.pickupDate;
 				pickUp.sellerId = item.sellerId;
 				pickUp.item = item._id;
+				pickUp.phoneNumber = req.body.phoneNumber;
 			}
 			
 			// Save the pickUp information
@@ -755,11 +756,15 @@ exports.searchCatalog = (req, res) => {
 		  //Grab the timestamp of the item
 		  var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
 		  var shortDescription = item.description;
+		  var shortTitle = item.title;
 		  if (shortDescription.length >= 35) {
 			  shortDescription = shortDescription.substr(0,35) + "...";
 		  }
+		  if (shortTitle.length >= 25) {
+			  shortTitle = shortTitle.substr(0,25) + "...";
+		  }
 		  
-		  itemMap.push({timestamp: timestamp,isMyItem: myID, itemId: item._id, image: imageStrings, description: shortDescription, price: item.price, title: item.title});
+		  itemMap.push({timestamp: timestamp,isMyItem: myID, itemId: item._id, image: imageStrings, description: shortDescription, price: item.price, title: shortTitle});
 		});
 
 		res.render('marketplace/index', {
@@ -815,13 +820,17 @@ exports.catalogLoadMore = (req, res) => {
 		  itemString = itemString.replace("ITEM_ID",items[i]._id);
 		  itemString = itemString.replace("IMGSRC",items[i].images[0].image.toString('utf8'));
 		  itemString = itemString.replace("TIMESTAMP",moment(items[i]._id.getTimestamp()).format('MMM DD, YYYY'));
-		  itemString = itemString.replace("TITLE_ITEM",items[i].title);
+		  
 		  
 		  var shortDescription = items[i].description;
+		  var shortTitle = items[i].title;
 		  if (shortDescription.length >= 35) {
 			  shortDescription = shortDescription.substr(0,35) + "...";
 		  }
-		  
+		  if (shortTitle.length >= 25) {
+			  shortTitle = shortTitle.substr(0,25) + "...";
+		  }
+		  itemString = itemString.replace("TITLE_ITEM",shortTitle);
 		  itemString = itemString.replace("DESCRIPTION_ITEM",shortDescription);
 		  itemString = itemString.replace("PRICE_ITEM",items[i].price);  
 		  item_contents +=itemString;
@@ -860,6 +869,7 @@ exports.getCatalog = (req, res) => {
 	  //Grab the timestamp of the item
 	  var timestamp = moment(item._id.getTimestamp()).format('MMM DD, YYYY');
 	  var shortDescription = item.description;
+	  var shortTitle = item.title;
 	  console.log(item);
 	  if (shortDescription==null){
 		  item.remove();
@@ -868,8 +878,11 @@ exports.getCatalog = (req, res) => {
 	  if (shortDescription.length >= 27) {
 		  shortDescription = shortDescription.substr(0,24) + "...";
 	  }
+	  if (shortTitle.length >= 25) {
+		  shortTitle = shortTitle.substr(0,25) + "...";
+	  }
 	  
-      itemMap.push({timestamp: timestamp,isMyItem: myID, itemId: item._id, image: imageStrings, description: shortDescription, price: item.price, title: item.title});
+      itemMap.push({timestamp: timestamp,isMyItem: myID, itemId: item._id, image: imageStrings, description: shortDescription, price: item.price, title: shortTitle});
     });
 
     res.render('marketplace/index', {

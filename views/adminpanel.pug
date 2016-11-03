@@ -5,17 +5,8 @@ block content
   .contact
     h2.title Admin Panel
 
-  form.form-horizontal(method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
-    .form-group
-      label(class=.col-xs-2.col-md-2 control-label', for='venmo') Venmo
-      .col-xs-8.col-md-8
-        input.form-control(type='text', name='venmo', id='venmo', autofocus=true)
-    .form-group
-      label(class=.col-xs-2.col-md-2 control-label', for='deposit') Deposit
-      .col-xs-8.col-md-8
-        input.form-control(type='text', name='deposit', id='deposit')
-    .form-group
-      .col-sm-offset-2.col-xs-8.col-md-8
-        button.btn.btn-primary(type='submit')
-          | Insert Deposit
+    div
+     h1
+      | Confirmed Seller / Buyer pairs.
+    for row in rows
+      

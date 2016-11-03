@@ -25,6 +25,13 @@ block content
          input(style='font-size:20px;font-weight:bold',type='text', name='pickupDate', value=old_date)  
         <br>  
         <br>
+        label(for='phoneNumber') Phone Number:
+        <br>
+        - var old_phone = item.pickup ? item.pickup.phoneNumber : ''
+        input(style='font-size:20px;font-weight:bold',type='text', name='phoneNumber', value=old_phone)  
+        <br>  
+        <br>
+        
         button.btn.btn-primary(type='submit', style='width:265px')
          |Confirm Pick Up
         script(type='text/javascript').
