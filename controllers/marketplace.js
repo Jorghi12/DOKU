@@ -644,6 +644,11 @@ exports.showMyPage = (req, res) => {
 		req.flash('info', { msg: 'Please log in to access your transactions.' });
 		return exports.getCatalog(req, res);
 	}
+	console.log("This is the best shit in the world.");
+	console.log("This is the best shit in the world.");
+	console.log("This is the best shit in the world.");
+	console.log("This is the best shit in the world.");
+	console.log(req.user._id);
 	Item.find({sellerId: req.user._id}).populate(
 			{
 				path:'delivery', model:'Delivery'
