@@ -60,9 +60,59 @@ exports.postVenmoDeposit = (req,res) => {
 
 exports.getAdminPanel = (req, res) => {
   //Need some security to verify if they belong on our team... ;)
-	
-  res.render('adminpanel', {
-    title: 'Admin Panel'
+  User.find({}).exec(function(err, users) {
+	  Item.find({}).sort([['_id', -1]]).populate(
+			{
+				path:'sellerId', model:'User'
+			}
+		).exec(function(err, items) {
+			
+		PickUp.find({}).populate(
+				[{path:'sellerId', model:'User'}, {path:'item', model:'Item'}]
+			).exec(function(err, pickups) {
+			Delivery.find({}).populate(
+				[{path:'buyerId', model:'User'}, {path:'item', model:'Item'}]
+			).exec(function(err, deliveries) {
+				var transactions = [];
+				var mapPickups = {};
+				for (var i =0;i<pickups.length;i++){
+					var pickup = pickups[i];
+					mapPickups[pickup.item._id] = pickup;
+				}
+				
+				var mapDeliveries = {};
+				for (var i =0;i<deliveries.length;i++){
+					var delivery = deliveries[i];
+					mapDeliveries[delivery.item._id] = delivery;
+				}
+				
+				//Hey you look like an Alien.
+				for (var key in mapPickups) {
+				  if (mapDeliveries.hasOwnProperty(key)) {
+					var pickup = mapPickups[key];
+					var deliv = mapDeliveries[key];
+					var object = {
+						seller: pickup.sellerId,
+						buyer: deliv.buyerId,
+						pickup_time: pickup.pickupDateTime,
+						pickup_location: pickup.pickupLocation,
+						delivery_location: deliv.deliveryLocation
+					};
+					transactions.push(object);
+				  }
+				}
+				
+				//Render page!
+			    res.render('adminpanel', {
+				    title: 'Admin Panel',
+			  	    users: users,
+				    items: items,
+				    transactions: transactions
+			    });
+				
+			})
+		})
+	  });
   });
 };
 

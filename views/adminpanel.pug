@@ -6,7 +6,84 @@ block content
     h2.title Admin Panel
 
     div
-     h1
-      | Confirmed Seller / Buyer pairs.
-    for row in rows
-      
+     <ul class="nav nav-pills">
+      <li class="active"><a data-toggle="pill" href="#home">Users</a></li>
+      <li><a data-toggle="pill" href="#menu1">Items</a></li>
+      <li><a data-toggle="pill" href="#menu2">Awaiting Transactions</a></li>
+     </ul>
+     
+     <div class="tab-content">
+      <div id="home" class="tab-pane fade in active">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              for user in users
+                <tr>
+                  td
+                   | #{user.profile ? user.profile.name : 'N/A'}
+                  td
+                   | #{user.email}
+                </tr>
+            </tbody>
+          </table>
+      </div>
+      <div id="menu1" class="tab-pane fade">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Seller</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              for item in items
+                <tr>
+                  td
+                   | #{item.sellerId.profile ? item.sellerId.profile.name : 'N/A'}
+                  td
+                   | #{item.title.length > 10 ? item.title.substr(0,10) : item.title}
+                  td
+                   | #{item.price}
+                  td
+                   | #{item.category}
+                </tr>
+            </tbody>
+          </table>
+      </div>
+      <div id="menu2" class="tab-pane fade">
+        <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Seller</th>
+                <th>Buyer</th>
+                <th>Pickup Time</th>
+                <th>Pickup Location</th>
+                <th>Delivery Location</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              for transaction in transactions
+                <tr>
+                  td
+                   | #{transaction.seller.profile ? transaction.seller.profile.name : transaction.seller.email}
+                  td
+                   | #{transaction.buyer.profile ? transaction.buyer.profile.name : transaction.buyer.email}
+                  td
+                   | #{transaction.pickup_time}
+                  td
+                   | #{transaction.pickup_location}
+                  td
+                   | #{transaction.delivery_location}
+                </tr>
+            </tbody>
+        </table>
+      </div>
+     </div>

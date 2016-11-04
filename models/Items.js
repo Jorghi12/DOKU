@@ -9,7 +9,7 @@ var imageSchema = new mongoose.Schema({
 
 //Can get the unique id of the item by using ._id
 const itemSchema = new mongoose.Schema({
-  sellerId: {type: String},
+  sellerId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   description: {type: String},
   price: {type: Number},
   images: [imageSchema],

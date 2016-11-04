@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const pickupSchema = new mongoose.Schema({
   pickupLocation: {type: String},
   pickupDateTime: {type: String},
-  sellerId: {type: String},
+  sellerId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   inProgress: {type: Boolean},
   item: {type: mongoose.Schema.Types.ObjectId, ref: 'Item'},
   phoneNumber: {type: String}
