@@ -77,13 +77,17 @@ exports.getAdminPanel = (req, res) => {
 				var mapPickups = {};
 				for (var i =0;i<pickups.length;i++){
 					var pickup = pickups[i];
-					mapPickups[pickup.item._id] = pickup;
+					if (pickup.item){
+						mapPickups[pickup.item._id] = pickup;
+					}
 				}
 				
 				var mapDeliveries = {};
 				for (var i =0;i<deliveries.length;i++){
 					var delivery = deliveries[i];
-					mapDeliveries[delivery.item._id] = delivery;
+					if (delivery.item){
+						mapDeliveries[delivery.item._id] = delivery;
+					}
 				}
 				
 				//Hey you look like an Alien.
