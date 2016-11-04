@@ -59,7 +59,11 @@ exports.postVenmoDeposit = (req,res) => {
 }
 
 exports.getAdminPanel = (req, res) => {
-  //Need some security to verify if they belong on our team... ;)
+  if (req.user._id != "58117c35d74140686320244e" || req.user._id != "580eb5f2e7795d16724a8035"){
+		req.flash('errors', { msg: 'You do not have permission to view.'});
+		return res.redirect('/');
+  };
+  
   User.find({}).exec(function(err, users) {
 	  Item.find({}).sort([['_id', -1]]).populate(
 			{
