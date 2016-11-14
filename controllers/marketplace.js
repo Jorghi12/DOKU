@@ -886,7 +886,7 @@ exports.getCatalog = (req, res) => {
     });
 
     res.render('marketplace/index', {
-      title: 'MarketPlace',
+      title: 'Cornell',
 	  category: "All Categories",
 	  search_text: "",
 	  items: itemMap
